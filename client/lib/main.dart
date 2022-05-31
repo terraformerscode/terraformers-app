@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:client/apptheme.dart';
 import 'package:client/pages/landing_page.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:client/pages/login_page.dart';
 import 'package:client/pages/splash_page.dart';
 
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
