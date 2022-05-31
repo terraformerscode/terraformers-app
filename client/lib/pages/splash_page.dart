@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+
+import 'login_page.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -8,11 +12,20 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  loginRoute() {
+    Navigator.pushReplacementNamed(context, "/login");
+  }
+
+  startTime() async {
+    var duration = const Duration(seconds: 2);
+    return Timer(duration, loginRoute);
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    // startTime();
+    startTime();
   }
 
   @override
@@ -34,6 +47,12 @@ class _SplashPageState extends State<SplashPage> {
                 "Thrive anytime, anywhere",
                 style: Theme.of(context).textTheme.headline3,
               ),
+              const SizedBox(height: 80),
+              const CircularProgressIndicator(
+                backgroundColor: Colors.white,
+                color: Color.fromARGB(255, 255, 200, 72),
+                strokeWidth: 5,
+              )
             ],
           ),
         ),
