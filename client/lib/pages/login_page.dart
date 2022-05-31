@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:client/appimagespath.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttericon/octicons_icons.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -15,7 +16,10 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    globeYellow = Image.asset(AppImagesPath.globeYellow);
+    globeYellow = Image.asset(
+      AppImagesPath.globeYellow,
+      fit: BoxFit.fitHeight,
+    );
   }
 
   @override
@@ -33,20 +37,87 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 150),
-              globeYellow,
+              const SizedBox(height: 160),
+              SizedBox(
+                height: 150,
+                width: 150,
+                child: globeYellow,
+              ),
+              const SizedBox(height: 40),
               Text(
                 'Login',
                 style: Theme.of(context).textTheme.headline2,
               ),
-              const SizedBox(height: 18),
+              const SizedBox(height: 100),
               Row(
-                children: const [
-                  Expanded(
-                    child: ElevatedButton(
+                children: [
+                  const Expanded(
+                    child: SizedBox(),
+                  ),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints.tightFor(width: 160, height: 40),
+                    child:
+                    ElevatedButton(
                       onPressed: null,
-                      child: Text('Connect with Metamask'),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Center(
+                            child: Text(
+                              'Metamask',
+                              style: Theme.of(context).textTheme.headline3,
+                            ),
+                          ),
+                          const Icon(
+                            Octicons.line_arrow_right,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
                     ),
+                  ),
+                  const Expanded(
+                    child: SizedBox(),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'or',
+                style: Theme.of(context).textTheme.headline3,
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  const Expanded(
+                    child: SizedBox(),
+                  ),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints.tightFor(width: 160, height: 40),
+                    child:
+                    ElevatedButton(
+                      onPressed: null,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Center(
+                            child: Text(
+                              'Phantom',
+                              style: Theme.of(context).textTheme.headline3,
+                            ),
+                          ),
+                          const Icon(
+                            Octicons.line_arrow_right,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const Expanded(
+                    child: SizedBox(),
                   ),
                 ],
               ),
