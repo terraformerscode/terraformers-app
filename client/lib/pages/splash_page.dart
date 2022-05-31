@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 
 import 'login_page.dart';
 
@@ -13,37 +14,45 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> {
   
-  //TODO: Animation not working
-  Route _createLoginRouteAnim() {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => const LoginPage(),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const begin = Offset(0.0, 1.0);
-        const end = Offset.zero;
-        const curve = Curves.ease;
+  // //TODO: Animation not working
+  // Route _createLoginRouteAnim() {
+  //   return PageRouteBuilder(
+  //     pageBuilder: (context, animation, secondaryAnimation) => const LoginPage(),
+  //     transitionDuration: const Duration(milliseconds: 5000),
+  //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+  //       const begin = Offset(0.0, 1.0);
+  //       const end = Offset.zero;
+  //       const curve = Curves.ease;
 
-        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+  //       var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
-        return SlideTransition(
-          position: animation.drive(tween),
-          child: child,
-        );
-      },
+  //       return SlideTransition(
+  //         position: animation.drive(tween),
+  //         child: child,
+  //       );
+  //     },
+  //   );
+  // }
+
+  void _loginRoute() {
+    // Navigator.of(context).pushReplacement(_createLoginRouteAnim());
+    Navigator.push(
+      context,
+      PageTransition(
+        type: PageTransitionType.rightToLeftWithFade,
+        child: const LoginPage(),
+        duration: const Duration(milliseconds: 2000),
+      )
     );
   }
 
-  void _loginRoute() {
-    Navigator.of(context).pushReplacement(_createLoginRouteAnim());
-  }
-
   Future<Timer> _startTime() async {
-    var duration = const Duration(seconds: 6);
+    var duration = const Duration(seconds: 5);
     return Timer(duration, _loginRoute);
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _startTime();
   }
