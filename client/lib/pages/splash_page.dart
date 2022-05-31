@@ -33,7 +33,7 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   void _loginRoute() {
-    Navigator.of(context).push(_createLoginRouteAnim());
+    Navigator.of(context).pushReplacement(_createLoginRouteAnim());
   }
 
   Future<Timer> _startTime() async {

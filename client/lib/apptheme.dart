@@ -15,6 +15,10 @@ class AppTheme {
           fontSize: 48.0,
           color: fgWhite
         ),
+        headline2: GoogleFonts.dellaRespira().copyWith(
+          fontSize: 36.0,
+          color: fgWhite
+        ),
         headline3: GoogleFonts.dellaRespira().copyWith(
           fontSize: 20.0,
           color: fgWhite
