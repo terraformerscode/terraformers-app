@@ -13,20 +13,39 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> {
   
-  loginRoute() {
-    Navigator.of(context).pushReplacementNamed("/login");
+  //TODO: Animation not working
+  Route _createLoginRouteAnim() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => const LoginPage(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
   }
 
-  startTime() async {
+  void _loginRoute() {
+    Navigator.of(context).push(_createLoginRouteAnim());
+  }
+
+  Future<Timer> _startTime() async {
     var duration = const Duration(seconds: 6);
-    return Timer(duration, loginRoute);
+    return Timer(duration, _loginRoute);
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    startTime();
+    _startTime();
   }
 
   @override
