@@ -12,12 +12,13 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  
   loginRoute() {
-    Navigator.pushReplacementNamed(context, "/login");
+    Navigator.of(context).pushReplacementNamed("/login");
   }
 
   startTime() async {
-    var duration = const Duration(seconds: 2);
+    var duration = const Duration(seconds: 6);
     return Timer(duration, loginRoute);
   }
 
