@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:client/components/auth_state.dart';
-import 'package:client/utils/constants.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -9,33 +7,10 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageState extends AuthState<LoginPage> {
+class _LoginPageState extends State<LoginPage> {
   bool _isLoading = false;
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
-
-  Future<void> _signIn() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    final response = await supabase.auth.signIn(
-      email: _emailController.text,
-      password: _passwordController.text,
-    );
-
-    final error = response.error;
-    if (error != null) {
-      context.showErrorSnackBar(message: error.message);
-    } else {
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil('/feed', (route) => false);
-    }
-
-    setState(() {
-      _isLoading = false;
-    });
-  }
 
   @override
   void initState() {
@@ -54,8 +29,6 @@ class _LoginPageState extends AuthState<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // TODO: Do we need an appbar?
-      // appBar: AppBar(title: const Text('Welcome')),
       body: Container(
         padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
         child: Column(
@@ -85,7 +58,7 @@ class _LoginPageState extends AuthState<LoginPage> {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: _isLoading ? null : _signIn,
+                    onPressed: null,
                     child: Text(_isLoading ? 'Loading' : 'Log In'),
                   ),
                 ),

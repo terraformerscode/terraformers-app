@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:client/apptheme.dart';
-import 'package:supabase/supabase.dart';
-import 'package:client/components/auth_required_state.dart';
-import 'package:client/utils/constants.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({Key? key}) : super(key: key);
@@ -11,7 +7,7 @@ class LandingPage extends StatefulWidget {
   _LandingPageState createState() => _LandingPageState();
 }
 
-class _LandingPageState extends AuthRequiredState<LandingPage> {
+class _LandingPageState extends State<LandingPage> {
   final _searchController = TextEditingController();
   var _loading = false;
   // Index for bottom nav bar
@@ -37,39 +33,6 @@ class _LandingPageState extends AuthRequiredState<LandingPage> {
       _selectedIndex = index;
       _loading = false;
     });
-  }
-
-  /// Called once a user id is received within `onAuthenticated()`
-  Future<void> _getProfile(String userId) async {
-    // setState(() {
-    //   _loading = true;
-    // });
-    // final response = await supabase
-    //     .from('profiles')
-    //     .select()
-    //     .eq('id', userId)
-    //     .single()
-    //     .execute();
-    // final error = response.error;
-    // if (error != null && response.status != 406) {
-    //   context.showErrorSnackBar(message: error.message);
-    // }
-    // final data = response.data;
-    // if (data != null) {
-    //   _usernameController.text = (data['username'] ?? '') as String;
-    //   _websiteController.text = (data['website'] ?? '') as String;
-    // }
-    // setState(() {
-    //   _loading = false;
-    // });
-  }
-
-  @override
-  void onAuthenticated(Session session) {
-    final user = session.user;
-    if (user != null) {
-      _getProfile(user.id);
-    }
   }
 
   @override
