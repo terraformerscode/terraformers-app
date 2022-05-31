@@ -39,15 +39,15 @@ class _SplashPageState extends State<SplashPage> {
     Navigator.push(
       context,
       PageTransition(
-        type: PageTransitionType.rightToLeftWithFade,
+        type: PageTransitionType.bottomToTop,
         child: const LoginPage(),
-        duration: const Duration(milliseconds: 2000),
+        duration: const Duration(milliseconds: 1000),
       )
     );
   }
 
   Future<Timer> _startTime() async {
-    var duration = const Duration(seconds: 5);
+    var duration = const Duration(seconds: 7);
     return Timer(duration, _loginRoute);
   }
 
