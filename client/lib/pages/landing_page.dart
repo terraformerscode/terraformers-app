@@ -26,7 +26,7 @@ class _LandingPageState extends State<LandingPage> {
         // _navigatorKey.currentState!.pushNamed("/addlisting");
         break;
       case 2:
-        Navigator.of(context).pushNamed("/account");
+        // Navigator.of(context).pushNamed("/account");
         break;
     }
     setState(() {
@@ -45,7 +45,7 @@ class _LandingPageState extends State<LandingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Feed Page"),
+        title: const Text("Landing Page"),
         centerTitle: true,
       ),
       body: Column(

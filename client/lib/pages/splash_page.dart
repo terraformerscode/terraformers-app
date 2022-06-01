@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -13,7 +14,6 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  
   // //TODO: Animation not working
   // Route _createLoginRouteAnim() {
   //   return PageRouteBuilder(
@@ -37,17 +37,18 @@ class _SplashPageState extends State<SplashPage> {
   void _loginRoute() {
     // Navigator.of(context).pushReplacement(_createLoginRouteAnim());
     Navigator.push(
-      context,
+      context, 
       PageTransition(
-        type: PageTransitionType.bottomToTop,
+        type: PageTransitionType.rightToLeftWithFade,
         child: const LoginPage(),
-        duration: const Duration(milliseconds: 1000),
-      )
+        duration: const Duration(milliseconds: 750),
+        reverseDuration: const Duration(milliseconds: 500)
+      ),
     );
   }
 
   Future<Timer> _startTime() async {
-    var duration = const Duration(seconds: 7);
+    var duration = const Duration(seconds: 5);
     return Timer(duration, _loginRoute);
   }
 

@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         '/': (_) => const SplashPage(),
         '/login': (_) => const LoginPage(),
         '/landing': (_) => const LandingPage(),
-      },
+      }, 
     );
   }
 }

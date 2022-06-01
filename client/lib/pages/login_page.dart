@@ -37,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 160),
+              const Expanded(child: SizedBox()),
               SizedBox(
                 height: 150,
                 width: 150,
@@ -55,9 +55,9 @@ class _LoginPageState extends State<LoginPage> {
                     child: SizedBox(),
                   ),
                   ConstrainedBox(
-                    constraints: const BoxConstraints.tightFor(width: 160, height: 40),
-                    child:
-                    ElevatedButton(
+                    constraints:
+                        const BoxConstraints.tightFor(width: 160, height: 40),
+                    child: ElevatedButton(
                       onPressed: null,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -82,45 +82,52 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
-              Text(
-                'or',
-                style: Theme.of(context).textTheme.headline3,
-              ),
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  const Expanded(
-                    child: SizedBox(),
-                  ),
-                  ConstrainedBox(
-                    constraints: const BoxConstraints.tightFor(width: 160, height: 40),
-                    child:
-                    ElevatedButton(
-                      onPressed: null,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Center(
-                            child: Text(
-                              'Phantom',
-                              style: Theme.of(context).textTheme.headline3,
-                            ),
-                          ),
-                          const Icon(
-                            Octicons.line_arrow_right,
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const Expanded(
-                    child: SizedBox(),
-                  ),
-                ],
-              ),
+              // ------------------ BEGINNING OF PHANTOM CARD -------------
+              //
+              //
+              // const SizedBox(height: 20),
+              // Text(
+              //   'or',
+              //   style: Theme.of(context).textTheme.headline3,
+              // ),
+              // const SizedBox(height: 20),
+              // Row(
+              //   children: [
+              //     const Expanded(
+              //       child: SizedBox(),
+              //     ),
+              //     ConstrainedBox(
+              //       constraints: const BoxConstraints.tightFor(width: 160, height: 40),
+              //       child:
+              //       ElevatedButton(
+              //         onPressed: null,
+              //         child: Row(
+              //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //           mainAxisSize: MainAxisSize.max,
+              //           children: [
+              //             Center(
+              //               child: Text(
+              //                 'Phantom',
+              //                 style: Theme.of(context).textTheme.headline3,
+              //               ),
+              //             ),
+              //             const Icon(
+              //               Octicons.line_arrow_right,
+              //               color: Colors.white,
+              //             ),
+              //           ],
+              //         ),
+              //       ),
+              //     ),
+              //     const Expanded(
+              //       child: SizedBox(),
+              //     ),
+              //   ],
+              // ),
+              //
+              //
+              // ------------------ END OF PHANTOM CARD -------------
+              const Expanded(child: SizedBox()),
             ],
           ),
         ),
