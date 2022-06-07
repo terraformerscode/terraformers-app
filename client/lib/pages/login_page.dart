@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:client/appimagespath.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/octicons_icons.dart';
@@ -15,11 +14,11 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    super.initState();
     globeYellow = Image.asset(
       AppImagesPath.globeYellow,
       fit: BoxFit.fitHeight,
     );
+    super.initState();
   }
 
   @override

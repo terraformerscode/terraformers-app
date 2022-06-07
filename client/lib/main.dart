@@ -3,6 +3,7 @@ import 'package:client/apptheme.dart';
 import 'package:client/pages/landing_page.dart';
 import 'package:client/pages/login_page.dart';
 import 'package:client/pages/splash_page.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
 Future<void> main() async {
