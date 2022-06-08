@@ -172,7 +172,7 @@ class _LoginPageState extends State<LoginPage> {
 
 _signUp(email, password) async {
   //TODO: Change URL to server host url
-  var url = "http://10.0.2.2:5000";
+  var url = "http://10.0.2.2:5000/signup";
 
   final response = await http.post(
     Uri.parse(url),
@@ -185,15 +185,15 @@ _signUp(email, password) async {
     }),
   );
 
-  print("http post sent");
+  print(response.body);
 
-  if (response.statusCode == 201) {
-    // If the server did return a 201 CREATED response,
-    // then parse the JSON.
+  // if (response.statusCode == 201) {
+  //   // If the server did return a 201 CREATED response,
+  //   // then parse the JSON.
 
-  } else {
-    // If the server did not return a 201 CREATED response,
-    // then throw an exception.
-    throw Exception('Failed to create album.');
-  }
+  // } else {
+  //   // If the server did not return a 201 CREATED response,
+  //   // then throw an exception.
+  //   throw Exception('Failed to create album.');
+  // }
 }
