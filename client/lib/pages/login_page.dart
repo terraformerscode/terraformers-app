@@ -11,6 +11,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   late Image globeYellow;
+  late TextEditingController _emailController;
+  late TextEditingController _passwordController;
 
   @override
   void initState() {
@@ -18,11 +20,15 @@ class _LoginPageState extends State<LoginPage> {
       AppImagesPath.globeYellow,
       fit: BoxFit.fitHeight,
     );
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -47,15 +53,26 @@ class _LoginPageState extends State<LoginPage> {
                 'Login',
                 style: Theme.of(context).textTheme.headline2,
               ),
-              const SizedBox(height: 100),
+              const SizedBox(height: 32),
+              TextFormField(
+                controller: _emailController,
+                decoration: const InputDecoration(labelText: 'Email'),
+              ),
+              const SizedBox(height: 32),
+              TextFormField(
+                controller: _passwordController,
+                decoration: const InputDecoration(labelText: 'Password'),
+              ),
+              const SizedBox(height: 32),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   const Expanded(
                     child: SizedBox(),
                   ),
                   ConstrainedBox(
                     constraints:
-                        const BoxConstraints.tightFor(width: 160, height: 40),
+                        const BoxConstraints.tightFor(width: 130, height: 40),
                     child: ElevatedButton(
                       onPressed: null,
                       child: Row(
@@ -64,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           Center(
                             child: Text(
-                              'Metamask',
+                              'Sign in',
                               style: Theme.of(context).textTheme.headline3,
                             ),
                           ),
@@ -75,9 +92,6 @@ class _LoginPageState extends State<LoginPage> {
                         ],
                       ),
                     ),
-                  ),
-                  const Expanded(
-                    child: SizedBox(),
                   ),
                 ],
               ),

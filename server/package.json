@@ -2,10 +2,11 @@
   "name": "server",
   "version": "1.0.0",
   "description": "Server-side app for Terraformers App",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node server.js",
+    "devStart": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,7 @@
   },
   "homepage": "https://github.com/terraformerscode/terraformers-app#readme",
   "dependencies": {
-    "express": "^4.18.1"
+    "express": "^4.18.1",
+    "nodemon": "^2.0.16"
   }
 }
