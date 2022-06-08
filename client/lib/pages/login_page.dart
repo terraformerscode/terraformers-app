@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:client/appimagespath.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/octicons_icons.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -63,9 +66,10 @@ class _LoginPageState extends State<LoginPage> {
                 controller: _passwordController,
                 decoration: const InputDecoration(labelText: 'Password'),
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 40),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisSize: MainAxisSize.max,
                 children: [
                   const Expanded(
                     child: SizedBox(),
@@ -75,6 +79,23 @@ class _LoginPageState extends State<LoginPage> {
                         const BoxConstraints.tightFor(width: 130, height: 40),
                     child: ElevatedButton(
                       onPressed: null,
+                      child: Center(
+                        child: Text(
+                          'Register',
+                          style: Theme.of(context).textTheme.headline3,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  ConstrainedBox(
+                    constraints:
+                        const BoxConstraints.tightFor(width: 130, height: 40),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        _signUp(
+                            _emailController.text, _passwordController.text);
+                      },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         mainAxisSize: MainAxisSize.max,
@@ -146,5 +167,33 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+}
+
+_signUp(email, password) async {
+  //TODO: Change URL to server host url
+  var url = "http://10.0.2.2:5000";
+
+  final response = await http.post(
+    Uri.parse(url),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'email': email,
+      'password': password,
+    }),
+  );
+
+  print("http post sent");
+
+  if (response.statusCode == 201) {
+    // If the server did return a 201 CREATED response,
+    // then parse the JSON.
+
+  } else {
+    // If the server did not return a 201 CREATED response,
+    // then throw an exception.
+    throw Exception('Failed to create album.');
   }
 }
