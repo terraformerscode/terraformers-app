@@ -4,6 +4,10 @@ import 'package:client/appimagespath.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/octicons_icons.dart';
 import 'package:http/http.dart' as http;
+import 'package:page_transition/page_transition.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'landing_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -33,6 +37,18 @@ class _LoginPageState extends State<LoginPage> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  void _landingPageRoute() {
+    // Navigator.of(context).pushReplacement(_createLoginRouteAnim());
+    Navigator.pushReplacement(
+      context,
+      PageTransition(
+          type: PageTransitionType.rightToLeftWithFade,
+          child: const LandingPage(),
+          duration: const Duration(milliseconds: 750),
+          reverseDuration: const Duration(milliseconds: 500)),
+    );
   }
 
   @override
@@ -95,6 +111,7 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed: () {
                         _signUp(
                             _emailController.text, _passwordController.text);
+                        _landingPageRoute();
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

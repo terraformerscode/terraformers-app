@@ -36,7 +36,7 @@ class _SplashPageState extends State<SplashPage> {
 
   void _loginRoute() {
     // Navigator.of(context).pushReplacement(_createLoginRouteAnim());
-    Navigator.push(
+    Navigator.pushReplacement(
       context, 
       PageTransition(
         type: PageTransitionType.rightToLeftWithFade,

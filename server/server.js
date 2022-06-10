@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 
 const mongoose = require('mongoose');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { ServerApiVersion } = require('mongodb');
 const uri = `mongodb+srv://TerraformersFirstDB:${process.env.MONGO_DB_PASSWORD}
 @prav-first-cluster.ffwq9.mongodb.net/?retryWrites=true&w=majority`;
 
@@ -34,9 +34,10 @@ app.post('/signup', async (req, res) => {
         password,
     });
     console.log(user);
-
     await user.save();
+
     // JSON Web Token
+    // To be saved in local cache for user auth
     res.json({token: "123456789"});
 
     // check db for duplicate email
