@@ -23,12 +23,14 @@ app.use(express.json({ extended: false }));
 
 app.get('/', (req, res) => res.send('Hello World!'));
 
+// User model
+const schema = new mongoose.Schema({ email: 'string', password: 'string' });
+const User = mongoose.model('User', schema);
+
 // signup route api
 app.post('/signup', async (req, res) => {
     const { email, password } = req.body;
     
-    const schema = new mongoose.Schema({ email: 'string', password: 'string' });
-    const User = mongoose.model('User', schema);
     let user = new User({
         email,
         password,
@@ -38,7 +40,7 @@ app.post('/signup', async (req, res) => {
 
     // JSON Web Token
     // To be saved in local cache for user auth
-    res.json({token: "123456789"});
+    res.json({authToken: "123456789"});
 
     // check db for duplicate email
     // return res.send('Hello World!')
