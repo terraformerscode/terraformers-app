@@ -108,9 +108,15 @@ class _LoginPageState extends State<LoginPage> {
                     constraints:
                         const BoxConstraints.tightFor(width: 130, height: 40),
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         _signUp(
                             _emailController.text, _passwordController.text);
+                        
+                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                        String? authToken = prefs.getString("authToken");
+                        print(authToken);
+                        if (authToken == null) return;
+
                         _landingPageRoute();
                       },
                       child: Row(
@@ -202,7 +208,9 @@ _signUp(email, password) async {
     }),
   );
 
-  print(response.body);
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var parseToken = jsonDecode(response.body);
+  await prefs.setString('authToken', parseToken["authToken"]);
 
   // if (response.statusCode == 201) {
   //   // If the server did return a 201 CREATED response,
