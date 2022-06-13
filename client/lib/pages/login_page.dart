@@ -25,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
 
   //---------------Routes---------------
   void _landingPageRoute() {
-    Navigator.pushReplacement(
+    Navigator.push(
       context,
       PageTransition(
           type: PageTransitionType.rightToLeftWithFade,
@@ -44,36 +44,38 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget continueWithEmailBtn() {
+  Widget continueWithEmailCard() {
     return Column(
       children: [
-        SizedBox(height: 80,),
+        Text(
+          'Welcome!',
+          style: Theme.of(context).textTheme.headline2,
+        ),
+        const SizedBox(height: 80,),
         ConstrainedBox(
           constraints: const BoxConstraints.tightFor(width: 250, height: 40),
           child: ElevatedButton(
-            onPressed: () async {
-              // ignore: todo
+            onPressed: () {
               //TODO: Perform user email validation -- Have they signed up or not?
               // Perform token validation as well
               setState(() {
                 _showEmailTextField = true;
               });
             },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Center(
-                  child: Text(
-                    'Continue with Email',
-                    style: Theme.of(context).textTheme.headline3,
-                  ),
-                ),
-                const Icon(
-                  Octicons.line_arrow_right,
-                  color: Colors.white,
-                ),
-              ],
+            child: Text(
+              'Sign In with Email',
+              style: Theme.of(context).textTheme.headline3,
+            ),
+          ),
+        ),
+        const SizedBox(height: 30),
+        ConstrainedBox(
+          constraints: const BoxConstraints.tightFor(width: 250, height: 40),
+          child: ElevatedButton(
+            onPressed: () {},
+            child: Text(
+              'Sign In with Google',
+              style: Theme.of(context).textTheme.headline3,
             ),
           ),
         ),
@@ -81,10 +83,59 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget signUpEmailTextCard() {
-    //TODO: Make better input decoration
+  Widget emailTextCard() {
+    //TODO: Make better input decoration for buttons
     return Column(
       children: [
+        Text(
+          'Welcome!',
+          style: Theme.of(context).textTheme.headline2,
+        ),
+        const SizedBox(height: 30,),
+        TextFormField(
+          controller: _emailController,
+          decoration: const InputDecoration(
+            labelText: 'Email',
+            hintText: 'Please enter your email'
+          ),
+        ),
+        const SizedBox(height: 30,),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                //TODO: Set all the prev states back, if any
+                setState(() {
+                  _showEmailTextField = false;
+                });
+              },
+              child: Text(
+                'Back',
+                style: Theme.of(context).textTheme.headline3,
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {},
+              child: Text(
+                'Proceed',
+                style: Theme.of(context).textTheme.headline3,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget signUpCard() {
+    return Column(
+      children: [
+        Text(
+          'Sign Up',
+          style: Theme.of(context).textTheme.headline2,
+        ),
         const SizedBox(height: 30,),
         TextFormField(
           controller: _emailController,
@@ -109,19 +160,12 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           mainAxisSize: MainAxisSize.max,
           children: [
-            const Expanded(
-              child: SizedBox(),
-            ),
-            ConstrainedBox(
-              constraints:
-                  const BoxConstraints.tightFor(width: 130, height: 40),
-              child: ElevatedButton(
-                onPressed: null,
-                child: Center(
-                  child: Text(
-                    'Register',
-                    style: Theme.of(context).textTheme.headline3,
-                  ),
+            ElevatedButton(
+              onPressed: null,
+              child: Center(
+                child: Text(
+                  'Register',
+                  style: Theme.of(context).textTheme.headline3,
                 ),
               ),
             ),
@@ -165,14 +209,10 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 80),
               terraformersYellowGlobe(),
               const SizedBox(height: 40),
-              Text(
-                'Login',
-                style: Theme.of(context).textTheme.headline2,
-              ),
               Visibility(
                 visible: _showEmailTextField,
-                replacement: continueWithEmailBtn(),
-                child: signUpEmailTextCard(),
+                replacement: continueWithEmailCard(),
+                child: emailTextCard(),
               ),
               const Expanded(child: SizedBox()),
             ],
@@ -213,88 +253,9 @@ _signUp(email, password) async {
   // }
 }
 
-// TextFormField(
-//                 controller: _emailController,
-//                 decoration: const InputDecoration(labelText: 'Email'),
-//               ),
-//               const SizedBox(height: 32),
-//               TextFormField(
-//                 controller: _passwordController,
-//                 decoration: const InputDecoration(labelText: 'Password'),
-//               ),
-//               const SizedBox(height: 40),
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-//                 mainAxisSize: MainAxisSize.max,
-//                 children: [
-//                   const Expanded(
-//                     child: SizedBox(),
-//                   ),
-//                   ConstrainedBox(
-//                     constraints:
-//                         const BoxConstraints.tightFor(width: 130, height: 40),
-//                     child: ElevatedButton(
-//                       onPressed: null,
-//                       child: Center(
-//                         child: Text(
-//                           'Register',
-//                           style: Theme.of(context).textTheme.headline3,
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                   const SizedBox(width: 8),
-
 // SharedPreferences prefs = await SharedPreferences.getInstance();
 //                     String? authToken = prefs.getString("authToken");
 //                     print(authToken);
 //                     if (authToken == null) return;
 
 //                     _landingPageRoute();
-
-
-// ------------------ BEGINNING OF PHANTOM CARD -------------
-              //
-              //
-              // const SizedBox(height: 20),
-              // Text(
-              //   'or',
-              //   style: Theme.of(context).textTheme.headline3,
-              // ),
-              // const SizedBox(height: 20),
-              // Row(
-              //   children: [
-              //     const Expanded(
-              //       child: SizedBox(),
-              //     ),
-              //     ConstrainedBox(
-              //       constraints: const BoxConstraints.tightFor(width: 160, height: 40),
-              //       child:
-              //       ElevatedButton(
-              //         onPressed: null,
-              //         child: Row(
-              //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //           mainAxisSize: MainAxisSize.max,
-              //           children: [
-              //             Center(
-              //               child: Text(
-              //                 'Phantom',
-              //                 style: Theme.of(context).textTheme.headline3,
-              //               ),
-              //             ),
-              //             const Icon(
-              //               Octicons.line_arrow_right,
-              //               color: Colors.white,
-              //             ),
-              //           ],
-              //         ),
-              //       ),
-              //     ),
-              //     const Expanded(
-              //       child: SizedBox(),
-              //     ),
-              //   ],
-              // ),
-              //
-              //
-              // ------------------ END OF PHANTOM CARD -------------
