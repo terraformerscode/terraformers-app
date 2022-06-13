@@ -12,12 +12,33 @@ class AppTheme {
     return ThemeData.dark().copyWith(
       primaryColor: fgWhite,
       textTheme: GoogleFonts.dellaRespiraTextTheme().copyWith(
-        headline1:
-            GoogleFonts.dellaRespira().copyWith(fontSize: 48.0, color: fgWhite),
-        headline2:
-            GoogleFonts.dellaRespira().copyWith(fontSize: 36.0, color: fgWhite),
-        headline3:
-            GoogleFonts.dellaRespira().copyWith(fontSize: 20.0, color: fgWhite),
+        // Use 2021 set
+        displayLarge:
+          GoogleFonts.dellaRespira().copyWith(fontSize: 44, color: fgWhite),
+        displayMedium:
+          GoogleFonts.dellaRespira().copyWith(fontSize: 36, color: fgWhite),
+        displaySmall:
+          GoogleFonts.dellaRespira().copyWith(fontSize: 28, color: fgWhite),
+        headlineMedium:
+          GoogleFonts.dellaRespira().copyWith(color: fgWhite),
+        headlineSmall:
+          GoogleFonts.dellaRespira().copyWith(color: fgWhite), 
+        titleLarge:
+          GoogleFonts.dellaRespira().copyWith(color: fgWhite),
+        titleMedium:
+          GoogleFonts.dellaRespira().copyWith(color: fgWhite),
+        titleSmall:
+          GoogleFonts.dellaRespira().copyWith(color: fgWhite),
+        bodyLarge:
+          GoogleFonts.dellaRespira().copyWith(color: fgWhite),
+        bodyMedium:
+          GoogleFonts.dellaRespira().copyWith(color: fgWhite),
+        bodySmall:
+          GoogleFonts.dellaRespira().copyWith(color: fgWhite), 
+        labelLarge:
+          GoogleFonts.dellaRespira().copyWith(color: fgWhite),
+        labelSmall:
+          GoogleFonts.dellaRespira().copyWith(color: fgWhite),
       ),
       scaffoldBackgroundColor: bgNavy,
       elevatedButtonTheme: ElevatedButtonThemeData(

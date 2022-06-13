@@ -16,14 +16,22 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
+enum ToggleBetweenCards {
+  continueWithEmail,
+  emailTextField,
+  signUp,
+  logIn,
+}
+
 class _LoginPageState extends State<LoginPage> {
   late Image _globeYellow;
   late TextEditingController _emailController;
+  late TextEditingController _usernameController;
   late TextEditingController _passwordController;
   late TextEditingController _cfmpasswordController;
-  late bool _showEmailTextField;
+  late ToggleBetweenCards _selectedCard;
 
-  //---------------Routes---------------
+  //=============Routes===================================================
   void _landingPageRoute() {
     Navigator.push(
       context,
@@ -35,7 +43,20 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  //--------------Widgets----------------
+  //=========================Widgets=======================================
+  Widget currentDisplayCard() {
+    switch (_selectedCard) {
+      case ToggleBetweenCards.continueWithEmail:
+        return continueWithEmailCard();
+      case ToggleBetweenCards.emailTextField:
+        return emailTextCard();
+      case ToggleBetweenCards.signUp:
+        return signUpCard();
+      case ToggleBetweenCards.logIn:
+        return const Text("Login card");
+    }
+  }
+
   Widget terraformersYellowGlobe() {
     return SizedBox(
       height: 150,
@@ -49,22 +70,22 @@ class _LoginPageState extends State<LoginPage> {
       children: [
         Text(
           'Welcome!',
-          style: Theme.of(context).textTheme.headline2,
+          style: Theme.of(context).textTheme,
         ),
-        const SizedBox(height: 80,),
+        const SizedBox(
+          height: 80,
+        ),
         ConstrainedBox(
           constraints: const BoxConstraints.tightFor(width: 250, height: 40),
           child: ElevatedButton(
             onPressed: () {
-              //TODO: Perform user email validation -- Have they signed up or not?
-              // Perform token validation as well
               setState(() {
-                _showEmailTextField = true;
+                _selectedCard = ToggleBetweenCards.emailTextField;
               });
             },
             child: Text(
               'Sign In with Email',
-              style: Theme.of(context).textTheme.headline3,
+              style: Theme.of(context).textTheme.displayMedium,
             ),
           ),
         ),
@@ -75,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
             onPressed: () {},
             child: Text(
               'Sign In with Google',
-              style: Theme.of(context).textTheme.headline3,
+              style: Theme.of(context).textTheme.displayMedium,
             ),
           ),
         ),
@@ -89,38 +110,58 @@ class _LoginPageState extends State<LoginPage> {
       children: [
         Text(
           'Welcome!',
-          style: Theme.of(context).textTheme.headline2,
+          style: Theme.of(context).textTheme,
         ),
-        const SizedBox(height: 30,),
+        Text(
+          'Welcome!',
+          style: Theme.of(context).textTheme,
+        ),
+        const SizedBox(
+          height: 30,
+        ),
         TextFormField(
           controller: _emailController,
           decoration: const InputDecoration(
-            labelText: 'Email',
-            hintText: 'Please enter your email'
-          ),
+              labelText: 'Email', hintText: 'Please enter your email'),
         ),
-        const SizedBox(height: 30,),
+        const SizedBox(
+          height: 30,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.max,
           children: [
             ElevatedButton(
               onPressed: () {
-                //TODO: Set all the prev states back, if any
                 setState(() {
-                  _showEmailTextField = false;
+                  _selectedCard = ToggleBetweenCards.continueWithEmail;
                 });
               },
               child: Text(
                 'Back',
-                style: Theme.of(context).textTheme.headline3,
+                style: Theme.of(context).textTheme,
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                //TODO: Perform user email validation -- Have they signed up or not?
+                // Perform token validation as well
+                // Decide which card to show next
+                bool hasSignedUp = false;
+                if (!hasSignedUp) {
+                  setState(() {
+                  _selectedCard = ToggleBetweenCards.signUp;
+                  });
+                // ignore: dead_code
+                } else {
+                  setState(() {
+                  _selectedCard = ToggleBetweenCards.logIn;
+                  });
+                }
+              },
               child: Text(
                 'Proceed',
-                style: Theme.of(context).textTheme.headline3,
+                style: Theme.of(context).textTheme,
               ),
             ),
           ],
@@ -134,13 +175,15 @@ class _LoginPageState extends State<LoginPage> {
       children: [
         Text(
           'Sign Up',
-          style: Theme.of(context).textTheme.headline2,
+          style: Theme.of(context).textTheme,
         ),
-        const SizedBox(height: 30,),
+        const SizedBox(
+          height: 30,
+        ),
         TextFormField(
-          controller: _emailController,
+          controller: _usernameController,
           decoration: const InputDecoration(
-              labelText: 'Email', hintText: 'Please enter your email'),
+              labelText: 'Username', hintText: 'Please enter your username'),
         ),
         const SizedBox(height: 20),
         TextFormField(
@@ -157,15 +200,31 @@ class _LoginPageState extends State<LoginPage> {
         ),
         const SizedBox(height: 40),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.max,
           children: [
             ElevatedButton(
-              onPressed: null,
+              onPressed: () {
+                setState(() {
+                  _selectedCard = ToggleBetweenCards.continueWithEmail;
+                });
+              },
+              child: Text(
+                'Back',
+                style: Theme.of(context).textTheme,
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                //TODO: Send Sign up request
+                setState(() {
+                  _selectedCard = ToggleBetweenCards.logIn;
+                });
+              },
               child: Center(
                 child: Text(
                   'Register',
-                  style: Theme.of(context).textTheme.headline3,
+                  style: Theme.of(context).textTheme,
                 ),
               ),
             ),
@@ -175,7 +234,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  //-----------Flutter Override Methods------------
+  //=====================Flutter Override Methods==============================
   @override
   void initState() {
     _globeYellow = Image.asset(
@@ -183,22 +242,26 @@ class _LoginPageState extends State<LoginPage> {
       fit: BoxFit.fitHeight,
     );
     _emailController = TextEditingController();
+    _usernameController = TextEditingController();
     _passwordController = TextEditingController();
     _cfmpasswordController = TextEditingController();
-    _showEmailTextField = false;
+    _selectedCard = ToggleBetweenCards.continueWithEmail;
     super.initState();
   }
 
   @override
   void dispose() {
     _emailController.dispose();
+    _usernameController.dispose();
     _passwordController.dispose();
+    _cfmpasswordController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // TODO: Make sure keyboard dont overflow
       body: Container(
         padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
         child: Center(
@@ -209,11 +272,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 80),
               terraformersYellowGlobe(),
               const SizedBox(height: 40),
-              Visibility(
-                visible: _showEmailTextField,
-                replacement: continueWithEmailCard(),
-                child: emailTextCard(),
-              ),
+              currentDisplayCard(),
               const Expanded(child: SizedBox()),
             ],
           ),
@@ -223,6 +282,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
+//=====================Interfacing with Node==============================
 _signUp(email, password) async {
   //TODO: Change URL to server host url
   var url = "http://10.0.2.2:5000/signup";
