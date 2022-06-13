@@ -17,27 +17,11 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  late Image globeYellow;
+  late Image _globeYellow;
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
-
-  @override
-  void initState() {
-    globeYellow = Image.asset(
-      AppImagesPath.globeYellow,
-      fit: BoxFit.fitHeight,
-    );
-    _emailController = TextEditingController();
-    _passwordController = TextEditingController();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
+  late TextEditingController _cfmpasswordController;
+  late bool _showEmailTextField;
 
   //---------------Routes---------------
   void _landingPageRoute() {
@@ -56,35 +40,116 @@ class _LoginPageState extends State<LoginPage> {
     return SizedBox(
       height: 150,
       width: 150,
-      child: globeYellow,
+      child: _globeYellow,
     );
   }
 
   Widget continueWithEmailBtn() {
-    return ConstrainedBox(
-      constraints: const BoxConstraints.tightFor(width: 250, height: 40),
-      child: ElevatedButton(
-        onPressed: () async {
-          _signUp(_emailController.text, _passwordController.text);
-        },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
+      children: [
+        SizedBox(height: 80,),
+        ConstrainedBox(
+          constraints: const BoxConstraints.tightFor(width: 250, height: 40),
+          child: ElevatedButton(
+            onPressed: () async {
+              // ignore: todo
+              //TODO: Perform user email validation -- Have they signed up or not?
+              // Perform token validation as well
+              setState(() {
+                _showEmailTextField = true;
+              });
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Center(
+                  child: Text(
+                    'Continue with Email',
+                    style: Theme.of(context).textTheme.headline3,
+                  ),
+                ),
+                const Icon(
+                  Octicons.line_arrow_right,
+                  color: Colors.white,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget signUpEmailTextCard() {
+    //TODO: Make better input decoration
+    return Column(
+      children: [
+        const SizedBox(height: 30,),
+        TextFormField(
+          controller: _emailController,
+          decoration: const InputDecoration(
+              labelText: 'Email', hintText: 'Please enter your email'),
+        ),
+        const SizedBox(height: 20),
+        TextFormField(
+          controller: _passwordController,
+          decoration: const InputDecoration(
+              labelText: 'Password', hintText: 'Please enter your password'),
+        ),
+        const SizedBox(height: 20),
+        TextFormField(
+          controller: _cfmpasswordController,
+          decoration: const InputDecoration(
+              labelText: 'Confirm Password',
+              hintText: 'Re-enter the same password as above'),
+        ),
+        const SizedBox(height: 40),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           mainAxisSize: MainAxisSize.max,
           children: [
-            Center(
-              child: Text(
-                'Continue with Email',
-                style: Theme.of(context).textTheme.headline3,
-              ),
+            const Expanded(
+              child: SizedBox(),
             ),
-            const Icon(
-              Octicons.line_arrow_right,
-              color: Colors.white,
+            ConstrainedBox(
+              constraints:
+                  const BoxConstraints.tightFor(width: 130, height: 40),
+              child: ElevatedButton(
+                onPressed: null,
+                child: Center(
+                  child: Text(
+                    'Register',
+                    style: Theme.of(context).textTheme.headline3,
+                  ),
+                ),
+              ),
             ),
           ],
         ),
-      ),
+      ],
     );
+  }
+
+  //-----------Flutter Override Methods------------
+  @override
+  void initState() {
+    _globeYellow = Image.asset(
+      AppImagesPath.globeYellow,
+      fit: BoxFit.fitHeight,
+    );
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+    _cfmpasswordController = TextEditingController();
+    _showEmailTextField = false;
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -97,15 +162,18 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Expanded(child: SizedBox()),
+              const SizedBox(height: 80),
               terraformersYellowGlobe(),
               const SizedBox(height: 40),
               Text(
                 'Login',
                 style: Theme.of(context).textTheme.headline2,
               ),
-              const SizedBox(height: 80),
-              continueWithEmailBtn(),
+              Visibility(
+                visible: _showEmailTextField,
+                replacement: continueWithEmailBtn(),
+                child: signUpEmailTextCard(),
+              ),
               const Expanded(child: SizedBox()),
             ],
           ),
