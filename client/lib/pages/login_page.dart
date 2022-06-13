@@ -70,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
       children: [
         Text(
           'Welcome!',
-          style: Theme.of(context).textTheme,
+          style: Theme.of(context).textTheme.headlineMedium,
         ),
         const SizedBox(
           height: 80,
@@ -85,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
             },
             child: Text(
               'Sign In with Email',
-              style: Theme.of(context).textTheme.displayMedium,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
         ),
@@ -96,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
             onPressed: () {},
             child: Text(
               'Sign In with Google',
-              style: Theme.of(context).textTheme.displayMedium,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
         ),
@@ -110,11 +110,11 @@ class _LoginPageState extends State<LoginPage> {
       children: [
         Text(
           'Welcome!',
-          style: Theme.of(context).textTheme,
+          style: Theme.of(context).textTheme.headlineMedium,
         ),
         Text(
-          'Welcome!',
-          style: Theme.of(context).textTheme,
+          'Instructions moving forward',
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
         const SizedBox(
           height: 30,
@@ -139,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
               },
               child: Text(
                 'Back',
-                style: Theme.of(context).textTheme,
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
             ),
             ElevatedButton(
@@ -161,7 +161,7 @@ class _LoginPageState extends State<LoginPage> {
               },
               child: Text(
                 'Proceed',
-                style: Theme.of(context).textTheme,
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
             ),
           ],
@@ -175,7 +175,7 @@ class _LoginPageState extends State<LoginPage> {
       children: [
         Text(
           'Sign Up',
-          style: Theme.of(context).textTheme,
+          style: Theme.of(context).textTheme.headlineMedium,
         ),
         const SizedBox(
           height: 30,
@@ -211,7 +211,7 @@ class _LoginPageState extends State<LoginPage> {
               },
               child: Text(
                 'Back',
-                style: Theme.of(context).textTheme,
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
             ),
             ElevatedButton(
@@ -224,7 +224,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Center(
                 child: Text(
                   'Register',
-                  style: Theme.of(context).textTheme,
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ),
             ),

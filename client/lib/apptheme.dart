@@ -14,11 +14,13 @@ class AppTheme {
       textTheme: GoogleFonts.dellaRespiraTextTheme().copyWith(
         // Use 2021 set
         displayLarge:
-          GoogleFonts.dellaRespira().copyWith(fontSize: 44, color: fgWhite),
+          GoogleFonts.dellaRespira().copyWith(color: fgWhite),
         displayMedium:
-          GoogleFonts.dellaRespira().copyWith(fontSize: 36, color: fgWhite),
+          GoogleFonts.dellaRespira().copyWith(color: fgWhite),
         displaySmall:
-          GoogleFonts.dellaRespira().copyWith(fontSize: 28, color: fgWhite),
+          GoogleFonts.dellaRespira().copyWith(color: fgWhite),
+        headlineLarge:
+          GoogleFonts.dellaRespira().copyWith(color: fgWhite),
         headlineMedium:
           GoogleFonts.dellaRespira().copyWith(color: fgWhite),
         headlineSmall:
@@ -36,6 +38,8 @@ class AppTheme {
         bodySmall:
           GoogleFonts.dellaRespira().copyWith(color: fgWhite), 
         labelLarge:
+          GoogleFonts.dellaRespira().copyWith(color: fgWhite),
+        labelMedium:
           GoogleFonts.dellaRespira().copyWith(color: fgWhite),
         labelSmall:
           GoogleFonts.dellaRespira().copyWith(color: fgWhite),

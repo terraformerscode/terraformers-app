@@ -71,11 +71,11 @@ class _SplashPageState extends State<SplashPage> {
             children: [
               Text(
                 "Terraformers",
-                style: Theme.of(context).textTheme.headline1,
+                style: Theme.of(context).textTheme.headlineLarge,
               ),
               Text(
                 "Thrive anytime, anywhere",
-                style: Theme.of(context).textTheme.headline3,
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 80),
               const CircularProgressIndicator(
