@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
       case ToggleBetweenCards.signUp:
         return signUpCard();
       case ToggleBetweenCards.logIn:
-        return const Text("Login card");
+        return logInCard();
     }
   }
 
@@ -112,13 +112,14 @@ class _LoginPageState extends State<LoginPage> {
           'Welcome!',
           style: Theme.of(context).textTheme.headlineMedium,
         ),
+        const SizedBox(height: 20),
         Text(
-          'Instructions moving forward',
+          '''Enter your email below. If you have not signed up,
+you will be directed to the registration page!''',
           style: Theme.of(context).textTheme.bodyLarge,
+          textAlign: TextAlign.center,
         ),
-        const SizedBox(
-          height: 30,
-        ),
+        const SizedBox(height: 30),
         TextFormField(
           controller: _emailController,
           decoration: const InputDecoration(
@@ -150,12 +151,12 @@ class _LoginPageState extends State<LoginPage> {
                 bool hasSignedUp = false;
                 if (!hasSignedUp) {
                   setState(() {
-                  _selectedCard = ToggleBetweenCards.signUp;
+                    _selectedCard = ToggleBetweenCards.signUp;
                   });
-                // ignore: dead_code
+                  // ignore: dead_code
                 } else {
                   setState(() {
-                  _selectedCard = ToggleBetweenCards.logIn;
+                    _selectedCard = ToggleBetweenCards.logIn;
                   });
                 }
               },
@@ -224,6 +225,60 @@ class _LoginPageState extends State<LoginPage> {
               child: Center(
                 child: Text(
                   'Register',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget logInCard() {
+    return Column(
+      children: [
+        Text(
+          'Log In',
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
+        const SizedBox(
+          height: 30,
+        ),
+        TextFormField(
+          controller: _emailController,
+          decoration: const InputDecoration(
+              labelText: 'Email', hintText: 'Please enter your Email'),
+        ),
+        const SizedBox(height: 20),
+        TextFormField(
+          controller: _passwordController,
+          decoration: const InputDecoration(
+              labelText: 'Password', hintText: 'Please enter your password'),
+        ),
+        const SizedBox(height: 40),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  _selectedCard = ToggleBetweenCards.continueWithEmail;
+                });
+              },
+              child: Text(
+                'Back',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                //TODO: Send Sign In request
+              },
+              child: Center(
+                child: Text(
+                  'Log In',
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ),
