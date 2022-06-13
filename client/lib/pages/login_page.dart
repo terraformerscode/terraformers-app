@@ -73,37 +73,7 @@ class _LoginPageState extends State<LoginPage> {
                 style: Theme.of(context).textTheme.headline2,
               ),
               const SizedBox(height: 32),
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(labelText: 'Email'),
-              ),
-              const SizedBox(height: 32),
-              TextFormField(
-                controller: _passwordController,
-                decoration: const InputDecoration(labelText: 'Password'),
-              ),
-              const SizedBox(height: 40),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  const Expanded(
-                    child: SizedBox(),
-                  ),
-                  ConstrainedBox(
-                    constraints:
-                        const BoxConstraints.tightFor(width: 130, height: 40),
-                    child: ElevatedButton(
-                      onPressed: null,
-                      child: Center(
-                        child: Text(
-                          'Register',
-                          style: Theme.of(context).textTheme.headline3,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
+              
                   ConstrainedBox(
                     constraints:
                         const BoxConstraints.tightFor(width: 130, height: 40),
@@ -222,3 +192,35 @@ _signUp(email, password) async {
   //   throw Exception('Failed to create album.');
   // }
 }
+
+// TextFormField(
+//                 controller: _emailController,
+//                 decoration: const InputDecoration(labelText: 'Email'),
+//               ),
+//               const SizedBox(height: 32),
+//               TextFormField(
+//                 controller: _passwordController,
+//                 decoration: const InputDecoration(labelText: 'Password'),
+//               ),
+//               const SizedBox(height: 40),
+//               Row(
+//                 mainAxisAlignment: MainAxisAlignment.spaceAround,
+//                 mainAxisSize: MainAxisSize.max,
+//                 children: [
+//                   const Expanded(
+//                     child: SizedBox(),
+//                   ),
+//                   ConstrainedBox(
+//                     constraints:
+//                         const BoxConstraints.tightFor(width: 130, height: 40),
+//                     child: ElevatedButton(
+//                       onPressed: null,
+//                       child: Center(
+//                         child: Text(
+//                           'Register',
+//                           style: Theme.of(context).textTheme.headline3,
+//                         ),
+//                       ),
+//                     ),
+//                   ),
+//                   const SizedBox(width: 8),
