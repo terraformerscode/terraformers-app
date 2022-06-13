@@ -39,8 +39,8 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  //---------------Routes---------------
   void _landingPageRoute() {
-    // Navigator.of(context).pushReplacement(_createLoginRouteAnim());
     Navigator.pushReplacement(
       context,
       PageTransition(
@@ -48,6 +48,42 @@ class _LoginPageState extends State<LoginPage> {
           child: const LandingPage(),
           duration: const Duration(milliseconds: 750),
           reverseDuration: const Duration(milliseconds: 500)),
+    );
+  }
+
+  //--------------Widgets----------------
+  Widget terraformersYellowGlobe() {
+    return SizedBox(
+      height: 150,
+      width: 150,
+      child: globeYellow,
+    );
+  }
+
+  Widget continueWithEmailBtn() {
+    return ConstrainedBox(
+      constraints: const BoxConstraints.tightFor(width: 250, height: 40),
+      child: ElevatedButton(
+        onPressed: () async {
+          _signUp(_emailController.text, _passwordController.text);
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Center(
+              child: Text(
+                'Continue with Email',
+                style: Theme.of(context).textTheme.headline3,
+              ),
+            ),
+            const Icon(
+              Octicons.line_arrow_right,
+              color: Colors.white,
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -62,98 +98,14 @@ class _LoginPageState extends State<LoginPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Expanded(child: SizedBox()),
-              SizedBox(
-                height: 150,
-                width: 150,
-                child: globeYellow,
-              ),
+              terraformersYellowGlobe(),
               const SizedBox(height: 40),
               Text(
                 'Login',
                 style: Theme.of(context).textTheme.headline2,
               ),
-              const SizedBox(height: 32),
-              
-                  ConstrainedBox(
-                    constraints:
-                        const BoxConstraints.tightFor(width: 130, height: 40),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        _signUp(
-                            _emailController.text, _passwordController.text);
-                        
-                        SharedPreferences prefs = await SharedPreferences.getInstance();
-                        String? authToken = prefs.getString("authToken");
-                        print(authToken);
-                        if (authToken == null) return;
-
-                        _landingPageRoute();
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Center(
-                            child: Text(
-                              'Sign in',
-                              style: Theme.of(context).textTheme.headline3,
-                            ),
-                          ),
-                          const Icon(
-                            Octicons.line_arrow_right,
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              // ------------------ BEGINNING OF PHANTOM CARD -------------
-              //
-              //
-              // const SizedBox(height: 20),
-              // Text(
-              //   'or',
-              //   style: Theme.of(context).textTheme.headline3,
-              // ),
-              // const SizedBox(height: 20),
-              // Row(
-              //   children: [
-              //     const Expanded(
-              //       child: SizedBox(),
-              //     ),
-              //     ConstrainedBox(
-              //       constraints: const BoxConstraints.tightFor(width: 160, height: 40),
-              //       child:
-              //       ElevatedButton(
-              //         onPressed: null,
-              //         child: Row(
-              //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //           mainAxisSize: MainAxisSize.max,
-              //           children: [
-              //             Center(
-              //               child: Text(
-              //                 'Phantom',
-              //                 style: Theme.of(context).textTheme.headline3,
-              //               ),
-              //             ),
-              //             const Icon(
-              //               Octicons.line_arrow_right,
-              //               color: Colors.white,
-              //             ),
-              //           ],
-              //         ),
-              //       ),
-              //     ),
-              //     const Expanded(
-              //       child: SizedBox(),
-              //     ),
-              //   ],
-              // ),
-              //
-              //
-              // ------------------ END OF PHANTOM CARD -------------
+              const SizedBox(height: 80),
+              continueWithEmailBtn(),
               const Expanded(child: SizedBox()),
             ],
           ),
@@ -224,3 +176,57 @@ _signUp(email, password) async {
 //                     ),
 //                   ),
 //                   const SizedBox(width: 8),
+
+// SharedPreferences prefs = await SharedPreferences.getInstance();
+//                     String? authToken = prefs.getString("authToken");
+//                     print(authToken);
+//                     if (authToken == null) return;
+
+//                     _landingPageRoute();
+
+
+// ------------------ BEGINNING OF PHANTOM CARD -------------
+              //
+              //
+              // const SizedBox(height: 20),
+              // Text(
+              //   'or',
+              //   style: Theme.of(context).textTheme.headline3,
+              // ),
+              // const SizedBox(height: 20),
+              // Row(
+              //   children: [
+              //     const Expanded(
+              //       child: SizedBox(),
+              //     ),
+              //     ConstrainedBox(
+              //       constraints: const BoxConstraints.tightFor(width: 160, height: 40),
+              //       child:
+              //       ElevatedButton(
+              //         onPressed: null,
+              //         child: Row(
+              //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //           mainAxisSize: MainAxisSize.max,
+              //           children: [
+              //             Center(
+              //               child: Text(
+              //                 'Phantom',
+              //                 style: Theme.of(context).textTheme.headline3,
+              //               ),
+              //             ),
+              //             const Icon(
+              //               Octicons.line_arrow_right,
+              //               color: Colors.white,
+              //             ),
+              //           ],
+              //         ),
+              //       ),
+              //     ),
+              //     const Expanded(
+              //       child: SizedBox(),
+              //     ),
+              //   ],
+              // ),
+              //
+              //
+              // ------------------ END OF PHANTOM CARD -------------
