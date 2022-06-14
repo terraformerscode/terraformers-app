@@ -140,7 +140,7 @@ you will be directed to the registration page!''',
               },
               child: Text(
                 'Back',
-                style: Theme.of(context).textTheme.bodyLarge,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
             ElevatedButton(
@@ -162,7 +162,7 @@ you will be directed to the registration page!''',
               },
               child: Text(
                 'Proceed',
-                style: Theme.of(context).textTheme.bodyLarge,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
           ],
@@ -212,7 +212,7 @@ you will be directed to the registration page!''',
               },
               child: Text(
                 'Back',
-                style: Theme.of(context).textTheme.bodyLarge,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
             ElevatedButton(
@@ -225,7 +225,7 @@ you will be directed to the registration page!''',
               child: Center(
                 child: Text(
                   'Register',
-                  style: Theme.of(context).textTheme.bodyLarge,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
             ),
@@ -269,7 +269,7 @@ you will be directed to the registration page!''',
               },
               child: Text(
                 'Back',
-                style: Theme.of(context).textTheme.bodyLarge,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
             ElevatedButton(
@@ -279,7 +279,7 @@ you will be directed to the registration page!''',
               child: Center(
                 child: Text(
                   'Log In',
-                  style: Theme.of(context).textTheme.bodyLarge,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
             ),
