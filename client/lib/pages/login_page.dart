@@ -24,11 +24,19 @@ enum ToggleBetweenCards {
 
 class _LoginPageState extends State<LoginPage> {
   late Image _globeYellow;
+
   late TextEditingController _emailController;
   late TextEditingController _usernameController;
   late TextEditingController _passwordController;
   late TextEditingController _cfmpasswordController;
+
   late ToggleBetweenCards _selectedCard;
+
+  late final _emailControllerKey = GlobalKey<FormFieldState>();
+  late final _usernameControllerKey = GlobalKey<FormFieldState>();
+  late final _passwordControllerKey = GlobalKey<FormFieldState>();
+  late final _cfmpasswordControllerKey = GlobalKey<FormFieldState>();
+
   late final _signUpFormKey = GlobalKey<FormState>();
 
   //=============Routes===================================================
@@ -191,21 +199,44 @@ you will be directed to the registration page!''',
             height: 20,
           ),
           TextFormField(
+            key: _usernameControllerKey,
             controller: _usernameController,
+            onChanged: (password) {
+              _usernameControllerKey.currentState!.validate();
+            },
+            validator: (password) {
+              //TODO Check if username is taken in database
+              return (_usernameController.text.isEmpty)
+                  ? "Username cannot be empty"
+                  : null;
+            },
             decoration: const InputDecoration(
                 labelText: 'Username', hintText: 'Please enter your username'),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 12),
           TextFormField(
+            key: _passwordControllerKey,
             obscureText: true,
             controller: _passwordController,
+            onChanged: (password) {
+              _passwordControllerKey.currentState!.validate();
+            },
+            validator: (username) {
+              return (_passwordController.text.length < 8)
+                  ? "Password needs to be at least 8 characters long"
+                  : null;
+            },
             decoration: const InputDecoration(
                 labelText: 'Password', hintText: 'Please enter your password'),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 12),
           TextFormField(
+            key: _cfmpasswordControllerKey,
             obscureText: true,
             controller: _cfmpasswordController,
+            onChanged: (password) {
+              _cfmpasswordControllerKey.currentState!.validate();
+            },
             validator: (cfmpassword) {
               return (_passwordController.text != cfmpassword)
                   ? "Password does not match the one above"
@@ -215,7 +246,7 @@ you will be directed to the registration page!''',
                 labelText: 'Confirm Password',
                 hintText: 'Re-enter the same password as above'),
           ),
-          const SizedBox(height: 40),
+          const SizedBox(height: 30),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.max,
