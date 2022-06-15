@@ -39,6 +39,8 @@ class _LoginPageState extends State<LoginPage> {
 
   late final _signUpFormKey = GlobalKey<FormState>();
 
+  RegExp emailRegExp = RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+
   //=============Routes===================================================
   void _landingPageRoute() {
     Navigator.push(
@@ -52,6 +54,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   //=========================Widgets=======================================
+
+  //=========================Cards=======================================
   Widget currentDisplayCard() {
     switch (_selectedCard) {
       case ToggleBetweenCards.continueWithEmail:
@@ -267,6 +271,9 @@ you will be directed to the registration page!''',
                   //TODO: Send Sign up request
                   if (!_signUpFormKey.currentState!.validate()) return;
 
+                  _passwordController.clear();
+                  _usernameController.dispose();
+                  _cfmpasswordController.dispose();
                   setState(() {
                     _selectedCard = ToggleBetweenCards.logIn;
                   });
@@ -296,12 +303,20 @@ you will be directed to the registration page!''',
           height: 30,
         ),
         TextFormField(
+          key: _emailControllerKey,
           controller: _emailController,
+          validator: (email) {
+            //TODO Check if email exists in database
+            return (!emailRegExp.hasMatch(email!))
+                ? "Please enter a valid email"
+                : null;
+          },
           decoration: const InputDecoration(
               labelText: 'Email', hintText: 'Please enter your Email'),
         ),
         const SizedBox(height: 20),
         TextFormField(
+          obscureText: true,
           controller: _passwordController,
           decoration: const InputDecoration(
               labelText: 'Password', hintText: 'Please enter your password'),
@@ -324,7 +339,8 @@ you will be directed to the registration page!''',
             ),
             ElevatedButton(
               onPressed: () {
-                //TODO: Send Sign In request
+                //TODO: Send Log In request
+                if (!_emailControllerKey.currentState!.validate()) return;
               },
               child: Center(
                 child: Text(
