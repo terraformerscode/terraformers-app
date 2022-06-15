@@ -25,7 +25,7 @@ app.get('/', (req, res) => res.send('Hello World!'));
 
 // User model
 const schema = new mongoose.Schema({ email: 'string', username: 'string', password: 'string' });
-const User = mongoose.model('User', schema);
+const User = mongoose.model('User', schema, 'testUsers');
 
 // signup route api
 app.post('/signup', async (req, res) => {
@@ -41,7 +41,7 @@ app.post('/signup', async (req, res) => {
 
     // JSON Web Token
     // To be saved in local cache for user auth
-    res.json({authToken: "123456789"});
+    res.json({terraformersAuthToken: "123456789"});
 
     // check db for duplicate email
     // return res.send('Hello World!')

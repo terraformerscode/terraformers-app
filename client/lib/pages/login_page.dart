@@ -285,8 +285,8 @@ you will be directed to the registration page!''',
                   }
 
                   _passwordController.clear();
-                  _usernameController.dispose();
-                  _cfmpasswordController.dispose();
+                  _usernameController.clear();
+                  _cfmpasswordController.clear();
 
                   setState(() {
                     _selectedCard = ToggleBetweenCards.logIn;
