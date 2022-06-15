@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:client/appimagespath.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/octicons_icons.dart';
@@ -30,6 +29,7 @@ class _LoginPageState extends State<LoginPage> {
   late TextEditingController _passwordController;
   late TextEditingController _cfmpasswordController;
   late ToggleBetweenCards _selectedCard;
+  late final _signUpFormKey = GlobalKey<FormState>();
 
   //=============Routes===================================================
   void _landingPageRoute() {
@@ -144,10 +144,17 @@ you will be directed to the registration page!''',
               ),
             ),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 //TODO: Perform user email validation -- Have they signed up or not?
                 // Perform token validation as well
                 // Decide which card to show next
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                String? authToken = prefs.getString("authToken");
+                print(authToken);
+                // if (authToken == null) return;
+
+                // _landingPageRoute();
+
                 bool hasSignedUp = false;
                 if (!hasSignedUp) {
                   setState(() {
@@ -172,66 +179,78 @@ you will be directed to the registration page!''',
   }
 
   Widget signUpCard() {
-    return Column(
-      children: [
-        Text(
-          'Sign Up',
-          style: Theme.of(context).textTheme.headlineMedium,
-        ),
-        const SizedBox(
-          height: 30,
-        ),
-        TextFormField(
-          controller: _usernameController,
-          decoration: const InputDecoration(
-              labelText: 'Username', hintText: 'Please enter your username'),
-        ),
-        const SizedBox(height: 20),
-        TextFormField(
-          controller: _passwordController,
-          decoration: const InputDecoration(
-              labelText: 'Password', hintText: 'Please enter your password'),
-        ),
-        const SizedBox(height: 20),
-        TextFormField(
-          controller: _cfmpasswordController,
-          decoration: const InputDecoration(
-              labelText: 'Confirm Password',
-              hintText: 'Re-enter the same password as above'),
-        ),
-        const SizedBox(height: 40),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  _selectedCard = ToggleBetweenCards.continueWithEmail;
-                });
-              },
-              child: Text(
-                'Back',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                //TODO: Send Sign up request
-                setState(() {
-                  _selectedCard = ToggleBetweenCards.logIn;
-                });
-              },
-              child: Center(
+    return Form(
+      key: _signUpFormKey,
+      child: Column(
+        children: [
+          Text(
+            'Sign Up',
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          TextFormField(
+            controller: _usernameController,
+            decoration: const InputDecoration(
+                labelText: 'Username', hintText: 'Please enter your username'),
+          ),
+          const SizedBox(height: 20),
+          TextFormField(
+            obscureText: true,
+            controller: _passwordController,
+            decoration: const InputDecoration(
+                labelText: 'Password', hintText: 'Please enter your password'),
+          ),
+          const SizedBox(height: 20),
+          TextFormField(
+            obscureText: true,
+            controller: _cfmpasswordController,
+            validator: (cfmpassword) {
+              return (_passwordController.text != cfmpassword)
+                  ? "Password does not match the one above"
+                  : null;
+            },
+            decoration: const InputDecoration(
+                labelText: 'Confirm Password',
+                hintText: 'Re-enter the same password as above'),
+          ),
+          const SizedBox(height: 40),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    _selectedCard = ToggleBetweenCards.continueWithEmail;
+                  });
+                },
                 child: Text(
-                  'Register',
+                  'Back',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
-            ),
-          ],
-        ),
-      ],
+              ElevatedButton(
+                onPressed: () {
+                  //TODO: Send Sign up request
+                  if (!_signUpFormKey.currentState!.validate()) return;
+
+                  setState(() {
+                    _selectedCard = ToggleBetweenCards.logIn;
+                  });
+                },
+                child: Center(
+                  child: Text(
+                    'Register',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -367,10 +386,3 @@ _signUp(email, password) async {
   //   throw Exception('Failed to create album.');
   // }
 }
-
-// SharedPreferences prefs = await SharedPreferences.getInstance();
-//                     String? authToken = prefs.getString("authToken");
-//                     print(authToken);
-//                     if (authToken == null) return;
-
-//                     _landingPageRoute();
