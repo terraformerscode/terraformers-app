@@ -24,15 +24,16 @@ app.use(express.json({ extended: false }));
 app.get('/', (req, res) => res.send('Hello World!'));
 
 // User model
-const schema = new mongoose.Schema({ email: 'string', password: 'string' });
+const schema = new mongoose.Schema({ email: 'string', username: 'string', password: 'string' });
 const User = mongoose.model('User', schema);
 
 // signup route api
 app.post('/signup', async (req, res) => {
-    const { email, password } = req.body;
+    const { email, username, password } = req.body;
     
     let user = new User({
         email,
+        username,
         password,
     });
     console.log(user);

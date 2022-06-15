@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:client/appimagespath.dart';
+import 'package:client/server_interface/user_registration_API.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/octicons_icons.dart';
 import 'package:http/http.dart' as http;
@@ -39,7 +40,8 @@ class _LoginPageState extends State<LoginPage> {
 
   late final _signUpFormKey = GlobalKey<FormState>();
 
-  RegExp emailRegExp = RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+  RegExp emailRegExp = RegExp(
+      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
 
   //=============Routes===================================================
   void _landingPageRoute() {
@@ -133,7 +135,13 @@ you will be directed to the registration page!''',
         ),
         const SizedBox(height: 30),
         TextFormField(
+          key: _emailControllerKey,
           controller: _emailController,
+          validator: (email) {
+            return (!emailRegExp.hasMatch(email!))
+                ? "Please enter a valid email"
+                : null;
+          },
           decoration: const InputDecoration(
               labelText: 'Email', hintText: 'Please enter your email'),
         ),
@@ -160,13 +168,6 @@ you will be directed to the registration page!''',
                 //TODO: Perform user email validation -- Have they signed up or not?
                 // Perform token validation as well
                 // Decide which card to show next
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                String? authToken = prefs.getString("authToken");
-                print(authToken);
-                // if (authToken == null) return;
-
-                // _landingPageRoute();
-
                 bool hasSignedUp = false;
                 if (!hasSignedUp) {
                   setState(() {
@@ -199,9 +200,7 @@ you will be directed to the registration page!''',
             'Sign Up',
             style: Theme.of(context).textTheme.headlineMedium,
           ),
-          const SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: 20),
           TextFormField(
             key: _usernameControllerKey,
             controller: _usernameController,
@@ -209,7 +208,6 @@ you will be directed to the registration page!''',
               _usernameControllerKey.currentState!.validate();
             },
             validator: (password) {
-              //TODO Check if username is taken in database
               return (_usernameController.text.isEmpty)
                   ? "Username cannot be empty"
                   : null;
@@ -267,13 +265,29 @@ you will be directed to the registration page!''',
                 ),
               ),
               ElevatedButton(
-                onPressed: () {
-                  //TODO: Send Sign up request
+                onPressed: () async {
+                  //TODO Check if username is taken in database
                   if (!_signUpFormKey.currentState!.validate()) return;
+
+                  await UserRegistrationAPI.signUp(_emailController.text,
+                      _usernameController.text, _passwordController.text);
+
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  String? authToken = prefs.getString("authToken");
+                  print("Sign up user token: $authToken");
+                  if (authToken == null) {
+                    SnackBar noTokenMsg = const SnackBar(
+                      content: Text('User Registration Failed! No token detected'),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(noTokenMsg);
+                    return;
+                  }
 
                   _passwordController.clear();
                   _usernameController.dispose();
                   _cfmpasswordController.dispose();
+
                   setState(() {
                     _selectedCard = ToggleBetweenCards.logIn;
                   });
@@ -401,35 +415,4 @@ you will be directed to the registration page!''',
       ),
     );
   }
-}
-
-//=====================Interfacing with Node==============================
-_signUp(email, password) async {
-  //TODO: Change URL to server host url
-  var url = "http://10.0.2.2:5000/signup";
-
-  final response = await http.post(
-    Uri.parse(url),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(<String, String>{
-      'email': email,
-      'password': password,
-    }),
-  );
-
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  var parseToken = jsonDecode(response.body);
-  await prefs.setString('authToken', parseToken["authToken"]);
-
-  // if (response.statusCode == 201) {
-  //   // If the server did return a 201 CREATED response,
-  //   // then parse the JSON.
-
-  // } else {
-  //   // If the server did not return a 201 CREATED response,
-  //   // then throw an exception.
-  //   throw Exception('Failed to create album.');
-  // }
 }
