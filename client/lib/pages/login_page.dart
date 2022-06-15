@@ -278,6 +278,7 @@ you will be directed to the registration page!''',
                       await SharedPreferences.getInstance();
                   String? authToken = prefs.getString("authToken");
                   print("Sign up user token: $authToken");
+
                   if (authToken == null) {
                     SnackBar noTokenMsg = const SnackBar(
                       content:
@@ -286,6 +287,11 @@ you will be directed to the registration page!''',
                     ScaffoldMessenger.of(context).showSnackBar(noTokenMsg);
                     return;
                   }
+                  SnackBar signUpSuccessfulMsg = const SnackBar(
+                      content:
+                          Text('Sign Up Successful!'),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(signUpSuccessfulMsg);
 
                   _passwordController.clear();
                   _usernameController.clear();
