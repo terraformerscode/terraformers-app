@@ -138,7 +138,7 @@ you will be directed to the registration page!''',
           key: _emailControllerKey,
           controller: _emailController,
           validator: (email) {
-            return (!emailRegExp.hasMatch(email!))
+            return (!emailRegExp.hasMatch(email!) || email.isEmpty)
                 ? "Please enter a valid email"
                 : null;
           },
@@ -165,6 +165,8 @@ you will be directed to the registration page!''',
             ),
             ElevatedButton(
               onPressed: () async {
+                if (!_emailControllerKey.currentState!.validate()) return;
+                
                 //TODO: Perform user email validation -- Have they signed up or not?
                 // Perform token validation as well
                 // Decide which card to show next
@@ -278,7 +280,8 @@ you will be directed to the registration page!''',
                   print("Sign up user token: $authToken");
                   if (authToken == null) {
                     SnackBar noTokenMsg = const SnackBar(
-                      content: Text('User Registration Failed! No token detected'),
+                      content:
+                          Text('User Registration Failed! No token detected'),
                     );
                     ScaffoldMessenger.of(context).showSnackBar(noTokenMsg);
                     return;
@@ -321,7 +324,7 @@ you will be directed to the registration page!''',
           controller: _emailController,
           validator: (email) {
             //TODO Check if email exists in database
-            return (!emailRegExp.hasMatch(email!))
+            return (!emailRegExp.hasMatch(email!) || email.isEmpty)
                 ? "Please enter a valid email"
                 : null;
           },
