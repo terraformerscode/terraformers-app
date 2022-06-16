@@ -281,15 +281,13 @@ you will be directed to the registration page!''',
 
                   if (authToken == null) {
                     SnackBar noTokenMsg = const SnackBar(
-                      content:
-                          Text('User Registration Failed! No token detected'),
+                      content: Text('User Registration Failed! No token detected'),
                     );
                     ScaffoldMessenger.of(context).showSnackBar(noTokenMsg);
                     return;
                   }
                   SnackBar signUpSuccessfulMsg = const SnackBar(
-                      content:
-                          Text('Sign Up Successful!'),
+                      content: Text('Sign Up Successful!'),
                     );
                     ScaffoldMessenger.of(context).showSnackBar(signUpSuccessfulMsg);
 
@@ -406,19 +404,24 @@ you will be directed to the registration page!''',
   Widget build(BuildContext context) {
     return Scaffold(
       // TODO: Make sure keyboard dont overflow
-      body: Container(
-        padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 80),
-              terraformersYellowGlobe(),
-              const SizedBox(height: 40),
-              currentDisplayCard(),
-              const Expanded(child: SizedBox()),
-            ],
+      body: SingleChildScrollView(
+        child: SizedBox(
+          // Phone screen's height and width to wrap column
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 80),
+                terraformersYellowGlobe(),
+                const SizedBox(height: 40),
+                currentDisplayCard(),
+                const Expanded(child: SizedBox()),
+              ],
+            ),
           ),
         ),
       ),
