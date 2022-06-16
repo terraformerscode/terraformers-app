@@ -18,6 +18,8 @@ async function connectDB() {
 }
 connectDB();
 
+const bcrypt = require('bcrypt');
+
 // this takes the post body
 app.use(express.json({ extended: false }));
 
@@ -31,20 +33,29 @@ const User = mongoose.model('User', schema, 'testUsers');
 app.post('/signup', async (req, res) => {
     const { email, username, password } = req.body;
     
+    var saltRounds = 15;
+    const hashPwd = await bcrypt.hash(password, saltRounds)
+        .then(hash => {
+            return hash;
+        })
+        .catch(err => {
+            console.log(err);
+            return null;
+        })
+        ?? "Hashing failed";
+    
     let user = new User({
-        email,
-        username,
-        password,
+        email: email,
+        username: username,
+        password: hashPwd
     });
     console.log(user);
     await user.save();
 
-    // JSON Web Token
-    // To be saved in local cache for user auth
+    // JSON Web Token: To be saved in local cache for user auth
     res.json({terraformersAuthToken: "123456789"});
 
-    // check db for duplicate email
-    // return res.send('Hello World!')
+    //TODO: check db for duplicate email
 });
 
 app.listen(5000, () => console.log('Listening on port 5000...'));
