@@ -35,6 +35,7 @@ var saltRounds = 15;
 // signup route api
 app.post('/signup', async (req, res) => {
     const { email, username, password } = req.body;
+    console.log(password);
     
     const hashPwd = await bcrypt.hash(password, saltRounds)
         .then(hash => {
@@ -63,21 +64,21 @@ app.post('/signup', async (req, res) => {
 // login route api
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
+    console.log(password);
     
     let user = await User.findOne({ email });
 
-    const hashEnteredPwd = await bcrypt.hash(password, saltRounds)
-        .then(hash => {
-            return hash;
-        })
-        .catch(err => {
-            console.log(err);
-            return null;
-        })
-        ?? "Hashing failed";
-    if (hashEnteredPwd != user.password) {
-        console.log("Auth NOT successful");
-    }
+    // const hashEnteredPwd = await bcrypt.hash(password, saltRounds)
+    //     .then(hash => {
+    //         return hash;
+    //     })
+    //     .catch(err => {
+    //         console.log(err);
+    //         return null;
+    //     })
+    //     ?? "Hashing failed";
+    var pwdAuthenticated = await bcrypt.compare(password, user.password);
+    console.log(pwdAuthenticated);
 
     // JSON Web Token: To be saved in local cache for user auth
     res.json({terraformersAuthToken: "123456789"});
