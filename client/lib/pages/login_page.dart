@@ -360,11 +360,16 @@ you will be directed to the registration page!''',
             ),
             ElevatedButton(
               onPressed: () async {
-                //TODO: Send Log In request
                 if (!_emailControllerKey.currentState!.validate()) return;
 
-                await UserRegistrationAPI.logIn(_emailController.text,
-                      _passwordController.text);
+                bool loggedIn = await UserRegistrationAPI.logIn(
+                    _emailController.text, _passwordController.text);
+                if (!loggedIn) {
+                  SnackBar logInFailed = const SnackBar(
+                    content: Text("Incorrect email or password. Please Try Again"));
+                  ScaffoldMessenger.of(context).showSnackBar(logInFailed);
+                  return;
+                }
 
                 Navigator.of(context).pushNamedAndRemoveUntil(
                     routesMap[Pages.landingPage]!, (route) => false);

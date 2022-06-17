@@ -3,9 +3,10 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserRegistrationAPI {
+  static var homeUrl = "http://10.0.2.2:5000";
+
   static signUp(email, username, password) async {
-    //TODO: Change URL to server host url
-    var url = "http://10.0.2.2:5000/signup";
+    var url = "$homeUrl/signup";
 
     final response = await http.post(
       Uri.parse(url),
@@ -23,21 +24,11 @@ class UserRegistrationAPI {
     var parseToken = jsonDecode(response.body);
     await prefs.setString(
         'terraformersAuthToken', parseToken["terraformersAuthToken"]);
-
-    // if (response.statusCode == 201) {
-    //   // If the server did return a 201 CREATED response,
-    //   // then parse the JSON.
-
-    // } else {
-    //   // If the server did not return a 201 CREATED response,
-    //   // then throw an exception.
-    //   throw Exception('Failed to create album.');
-    // }
   }
 
-  static logIn(email, password) async {
-    //TODO: Change URL to server host url
-    var url = "http://10.0.2.2:5000/login";
+  static Future<bool> logIn(email, password) async {
+    var url = "$homeUrl/login";
+    var loggedIn = false;
 
     final response = await http.post(
       Uri.parse(url),
@@ -50,19 +41,16 @@ class UserRegistrationAPI {
       }),
     );
 
+    var parseResponse = jsonDecode(response.body);
+
+    if (!parseResponse["emailExists"] || !parseResponse["pwdAuthenticated"]) {
+      return loggedIn;
+    }
+    loggedIn = true;
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var parseToken = jsonDecode(response.body);
     await prefs.setString(
-        'terraformersAuthToken', parseToken["terraformersAuthToken"]);
-
-    // if (response.statusCode == 201) {
-    //   // If the server did return a 201 CREATED response,
-    //   // then parse the JSON.
-
-    // } else {
-    //   // If the server did not return a 201 CREATED response,
-    //   // then throw an exception.
-    //   throw Exception('Failed to create album.');
-    // }
+        'terraformersAuthToken', parseResponse["terraformersAuthToken"]);
+    return loggedIn;
   }
 }

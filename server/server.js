@@ -63,12 +63,25 @@ app.post('/signup', async (req, res) => {
 // login route api
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
-    
-    let user = await User.findOne({ email });
-    var pwdAuthenticated = await bcrypt.compare(password, user.password);
 
-    // JSON Web Token: To be saved in local cache for user auth
-    res.json({terraformersAuthToken: "123456789"});
+    let user = await User.findOne({ email });
+    var emailExists = false;
+    var pwdAuthenticated = false;
+    var authToken = "0";
+    if (user != null) {
+        emailExists = true;
+        pwdAuthenticated = await bcrypt.compare(password, user.password);
+
+        // JSON Web Token: To be saved in local cache for user auth
+        // TODO: Put an actual token
+        authToken = "123456789";
+    }
+
+    res.json({
+        terraformersAuthToken: authToken,
+        pwdAuthenticated: pwdAuthenticated,
+        emailExists: emailExists
+    });
 });
 
 app.listen(5000, () => console.log('Listening on port 5000...'));
