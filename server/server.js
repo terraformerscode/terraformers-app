@@ -29,11 +29,13 @@ app.get('/', (req, res) => res.send('Hello World!'));
 const schema = new mongoose.Schema({ email: 'string', username: 'string', password: 'string' });
 const User = mongoose.model('User', schema, 'testUsers');
 
+// Hashing
+var saltRounds = 15;
+
 // signup route api
 app.post('/signup', async (req, res) => {
     const { email, username, password } = req.body;
     
-    var saltRounds = 15;
     const hashPwd = await bcrypt.hash(password, saltRounds)
         .then(hash => {
             return hash;
@@ -51,6 +53,31 @@ app.post('/signup', async (req, res) => {
     });
     console.log(user);
     await user.save();
+
+    // JSON Web Token: To be saved in local cache for user auth
+    res.json({terraformersAuthToken: "123456789"});
+
+    //TODO: check db for duplicate email
+});
+
+// login route api
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+    
+    let user = await User.findOne({ email });
+
+    const hashEnteredPwd = await bcrypt.hash(password, saltRounds)
+        .then(hash => {
+            return hash;
+        })
+        .catch(err => {
+            console.log(err);
+            return null;
+        })
+        ?? "Hashing failed";
+    if (hashEnteredPwd != user.password) {
+        console.log("Auth NOT successful");
+    }
 
     // JSON Web Token: To be saved in local cache for user auth
     res.json({terraformersAuthToken: "123456789"});

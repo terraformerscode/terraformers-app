@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:client/appimagespath.dart';
+import 'package:client/main.dart';
 import 'package:client/server_interface/user_registration_API.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/octicons_icons.dart';
@@ -169,10 +170,6 @@ you will be directed to the registration page!''',
             ElevatedButton(
               onPressed: () async {
                 if (!_emailControllerKey.currentState!.validate()) return;
-
-                //TODO: Perform user email validation -- Have they signed up or not?
-                // Perform token validation as well
-                // Decide which card to show next
                 bool hasSignedUp = false;
                 if (!hasSignedUp) {
                   setState(() {
@@ -271,7 +268,6 @@ you will be directed to the registration page!''',
               ),
               ElevatedButton(
                 onPressed: () async {
-                  //TODO Check if username is taken in database
                   if (!_signUpFormKey.currentState!.validate()) return;
 
                   await UserRegistrationAPI.signUp(_emailController.text,
@@ -332,7 +328,6 @@ you will be directed to the registration page!''',
           key: _emailControllerKey,
           controller: _emailController,
           validator: (email) {
-            //TODO Check if email exists in database
             return (!emailRegExp.hasMatch(email!) || email.isEmpty)
                 ? "Please enter a valid email"
                 : null;
@@ -364,9 +359,15 @@ you will be directed to the registration page!''',
               ),
             ),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 //TODO: Send Log In request
                 if (!_emailControllerKey.currentState!.validate()) return;
+
+                await UserRegistrationAPI.logIn(_emailController.text,
+                      _passwordController.text);
+
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    routesMap[Pages.landingPage]!, (route) => false);
               },
               child: Center(
                 child: Text(
