@@ -22,7 +22,9 @@ enum ToggleBetweenCards {
   emailTextField,
   signUp,
   logIn,
-  forgotPassword
+  forgotPassword,
+  forgotPasswordOTPVerification,
+  resetPassword
 }
 
 class _LoginPageState extends State<LoginPage> {
@@ -72,6 +74,10 @@ class _LoginPageState extends State<LoginPage> {
         return logInCard();
       case ToggleBetweenCards.forgotPassword:
         return forgotPwdCard();
+      case ToggleBetweenCards.forgotPasswordOTPVerification:
+        return otpCard();
+      case ToggleBetweenCards.resetPassword:
+        return resetPwdCard();
     }
   }
 
@@ -405,8 +411,8 @@ you will be directed to the registration page!''',
               child: Text(
                 'here.',
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                  color: const Color.fromARGB(255, 255, 187, 0),
-                ),
+                      color: const Color.fromARGB(255, 255, 187, 0),
+                    ),
               ),
             ),
           ],
@@ -426,6 +432,7 @@ you will be directed to the registration page!''',
         const SizedBox(height: 20),
         Text(
           '''Enter the email you signed up with.
+
 An OTP will be sent to this email
 to reset your password!''',
           style: Theme.of(context).textTheme.bodyLarge,
@@ -481,6 +488,136 @@ to reset your password!''',
     );
   }
 
+  Widget otpCard() {
+    //TODO: Make better input decoration for buttons
+    return Column(
+      children: [
+        Text(
+          'Reset Password',
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
+        const SizedBox(height: 20),
+        Text(
+          '''Enter the OTP sent to your email''',
+          style: Theme.of(context).textTheme.bodyLarge,
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 30),
+        TextFormField(
+          key: _emailControllerKey,
+          controller: _emailController,
+          onChanged: (value) {
+            _emailControllerKey.currentState!.validate();
+          },
+          validator: (email) {
+            return (!emailRegExp.hasMatch(email!) || email.isEmpty)
+                ? "Please enter a valid email"
+                : null;
+          },
+          decoration: const InputDecoration(
+              labelText: 'Email', hintText: 'Please enter your email'),
+        ),
+        const SizedBox(
+          height: 30,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  _selectedCard = ToggleBetweenCards.logIn;
+                });
+              },
+              child: Text(
+                'Back',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                if (!_emailControllerKey.currentState!.validate()) return;
+                // TODO: Verify email exists
+                // TODO: Navigate to OTP screen + send OTP to email
+              },
+              child: Text(
+                'Proceed',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget resetPwdCard() {
+    //TODO: Make better input decoration for buttons
+    return Column(
+      children: [
+        Text(
+          'Reset Password',
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
+        const SizedBox(height: 20),
+        Text(
+          '''Enter the email you signed up with.
+
+An OTP will be sent to this email
+to reset your password!''',
+          style: Theme.of(context).textTheme.bodyLarge,
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 30),
+        TextFormField(
+          key: _emailControllerKey,
+          controller: _emailController,
+          onChanged: (value) {
+            _emailControllerKey.currentState!.validate();
+          },
+          validator: (email) {
+            return (!emailRegExp.hasMatch(email!) || email.isEmpty)
+                ? "Please enter a valid email"
+                : null;
+          },
+          decoration: const InputDecoration(
+              labelText: 'Email', hintText: 'Please enter your email'),
+        ),
+        const SizedBox(
+          height: 30,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  _selectedCard = ToggleBetweenCards.logIn;
+                });
+              },
+              child: Text(
+                'Back',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                if (!_emailControllerKey.currentState!.validate()) return;
+                // TODO: Verify email exists
+                // TODO: Navigate to OTP screen + send OTP to email
+              },
+              child: Text(
+                'Proceed',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
 
   //=====================Flutter Override Methods==============================
   @override
