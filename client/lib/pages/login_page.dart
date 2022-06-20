@@ -45,6 +45,8 @@ class _LoginPageState extends State<LoginPage> {
   late final _usernameControllerKey = GlobalKey<FormFieldState>();
   late final _passwordControllerKey = GlobalKey<FormFieldState>();
   late final _cfmpasswordControllerKey = GlobalKey<FormFieldState>();
+  late final _resetpasswordControllerKey = GlobalKey<FormFieldState>();
+  late final _cfmresetpasswordControllerKey = GlobalKey<FormFieldState>();
 
   late final _signUpFormKey = GlobalKey<FormState>();
 
@@ -219,10 +221,10 @@ you will be directed to the registration page!''',
           TextFormField(
             key: _usernameControllerKey,
             controller: _usernameController,
-            onChanged: (password) {
+            onChanged: (username) {
               _usernameControllerKey.currentState!.validate();
             },
-            validator: (password) {
+            validator: (username) {
               return (_usernameController.text.isEmpty)
                   ? "Username cannot be empty"
                   : null;
@@ -238,7 +240,7 @@ you will be directed to the registration page!''',
             onChanged: (password) {
               _passwordControllerKey.currentState!.validate();
             },
-            validator: (username) {
+            validator: (password) {
               return (_passwordController.text.length < 8)
                   ? "Password needs to be at least 8 characters long"
                   : null;
@@ -578,27 +580,43 @@ to reset your password!''',
         ),
         const SizedBox(height: 20),
         Text(
-          '''Enter the email you signed up with.
-
-An OTP will be sent to this email
-to reset your password!''',
+          '''Enter your new password''',
           style: Theme.of(context).textTheme.bodyLarge,
           textAlign: TextAlign.center,
         ),
+        const SizedBox(height: 20),
+        TextFormField(
+          key: _resetpasswordControllerKey,
+          controller: _resetpasswordController,
+          onChanged: (pwd) {
+            _resetpasswordControllerKey.currentState!.validate();
+          },
+          validator: (pwd) {
+              return (_resetpasswordController.text.length < 8)
+                  ? "Password needs to be at least 8 characters long"
+                  : null;
+            },
+          decoration: const InputDecoration(
+            labelText: 'New Password',
+            hintText: 'Please enter your new password',
+          ),
+        ),
         const SizedBox(height: 30),
         TextFormField(
-          key: _emailControllerKey,
-          controller: _emailController,
-          onChanged: (value) {
-            _emailControllerKey.currentState!.validate();
+          key: _cfmresetpasswordControllerKey,
+          controller: _cfmresetpasswordController,
+          onChanged: (cfmpwd) {
+            _cfmresetpasswordControllerKey.currentState!.validate();
           },
-          validator: (email) {
-            return (!emailRegExp.hasMatch(email!) || email.isEmpty)
-                ? "Please enter a valid email"
-                : null;
+          validator: (cfmpassword) {
+            return (_resetpasswordController.text != cfmpassword)
+              ? "Password does not match the one above"
+              : null;
           },
           decoration: const InputDecoration(
-              labelText: 'Email', hintText: 'Please enter your email'),
+            labelText: 'Confirm Password',
+            hintText: 'Please enter the same password as above',
+          ),
         ),
         const SizedBox(
           height: 30,
@@ -620,7 +638,6 @@ to reset your password!''',
             ),
             ElevatedButton(
               onPressed: () async {
-                if (!_emailControllerKey.currentState!.validate()) return;
                 // TODO: Update password
                 setState(() {
                   _selectedCard = ToggleBetweenCards.logIn;
