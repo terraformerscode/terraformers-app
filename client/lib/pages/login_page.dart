@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:client/appimagespath.dart';
 import 'package:client/main.dart';
 import 'package:client/server_interface/user_registration_API.dart';
+import 'package:client/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/octicons_icons.dart';
 import 'package:http/http.dart' as http;
@@ -411,7 +412,7 @@ you will be directed to the registration page!''',
               child: Text(
                 'here.',
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      color: const Color.fromARGB(255, 255, 187, 0),
+                      color: TerraformersConst().yellow,
                     ),
               ),
             ),
@@ -476,6 +477,9 @@ to reset your password!''',
                 if (!_emailControllerKey.currentState!.validate()) return;
                 // TODO: Verify email exists
                 // TODO: Navigate to OTP screen + send OTP to email
+                setState(() {
+                  _selectedCard = ToggleBetweenCards.forgotPasswordOTPVerification;
+                });
               },
               child: Text(
                 'Proceed',
@@ -527,7 +531,7 @@ to reset your password!''',
             ElevatedButton(
               onPressed: () {
                 setState(() {
-                  _selectedCard = ToggleBetweenCards.logIn;
+                  _selectedCard = ToggleBetweenCards.forgotPassword;
                 });
               },
               child: Text(
@@ -538,8 +542,10 @@ to reset your password!''',
             ElevatedButton(
               onPressed: () async {
                 if (!_emailControllerKey.currentState!.validate()) return;
-                // TODO: Verify email exists
-                // TODO: Navigate to OTP screen + send OTP to email
+                // TODO: Verify OTP
+                setState(() {
+                  _selectedCard = ToggleBetweenCards.resetPassword;
+                });
               },
               child: Text(
                 'Proceed',
@@ -594,7 +600,7 @@ to reset your password!''',
             ElevatedButton(
               onPressed: () {
                 setState(() {
-                  _selectedCard = ToggleBetweenCards.logIn;
+                  _selectedCard = ToggleBetweenCards.resetPassword;
                 });
               },
               child: Text(
@@ -605,8 +611,10 @@ to reset your password!''',
             ElevatedButton(
               onPressed: () async {
                 if (!_emailControllerKey.currentState!.validate()) return;
-                // TODO: Verify email exists
-                // TODO: Navigate to OTP screen + send OTP to email
+                // TODO: Update password
+                setState(() {
+                  _selectedCard = ToggleBetweenCards.logIn;
+                });
               },
               child: Text(
                 'Proceed',
