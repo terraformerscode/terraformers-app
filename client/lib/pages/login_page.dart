@@ -22,6 +22,7 @@ enum ToggleBetweenCards {
   emailTextField,
   signUp,
   logIn,
+  forgotPassword
 }
 
 class _LoginPageState extends State<LoginPage> {
@@ -56,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  //=========================Widgets=======================================
+  //=========================User Auth Methods=============================
 
   //=========================Cards=======================================
   Widget currentDisplayCard() {
@@ -69,6 +70,8 @@ class _LoginPageState extends State<LoginPage> {
         return signUpCard();
       case ToggleBetweenCards.logIn:
         return logInCard();
+      case ToggleBetweenCards.forgotPassword:
+        return forgotPwdCard();
     }
   }
 
@@ -366,7 +369,8 @@ you will be directed to the registration page!''',
                     _emailController.text, _passwordController.text);
                 if (!loggedIn) {
                   SnackBar logInFailed = const SnackBar(
-                    content: Text("Incorrect email or password. Please Try Again"));
+                      content: Text(
+                          "Incorrect email or password. Please Try Again"));
                   ScaffoldMessenger.of(context).showSnackBar(logInFailed);
                   return;
                 }
@@ -383,9 +387,94 @@ you will be directed to the registration page!''',
             ),
           ],
         ),
+        const SizedBox(height: 30),
+        Row(children: [
+          Text(
+            'Forgot your password? ',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          InkWell(
+            onTap: () {
+              setState(() {
+                _selectedCard = ToggleBetweenCards.forgotPassword;
+              });
+            },
+            child: Text(
+              'Click here',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+          ),
+        ])
       ],
     );
   }
+
+  Widget forgotPwdCard() {
+    //TODO: Make better input decoration for buttons
+    return Column(
+      children: [
+        Text(
+          'Reset Password',
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
+        const SizedBox(height: 20),
+        Text(
+          '''Enter the email you signed up with.
+An OTP will be sent to this email
+to reset your password!''',
+          style: Theme.of(context).textTheme.bodyLarge,
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 30),
+        TextFormField(
+          key: _emailControllerKey,
+          controller: _emailController,
+          onChanged: (value) {
+            _emailControllerKey.currentState!.validate();
+          },
+          validator: (email) {
+            return (!emailRegExp.hasMatch(email!) || email.isEmpty)
+                ? "Please enter a valid email"
+                : null;
+          },
+          decoration: const InputDecoration(
+              labelText: 'Email', hintText: 'Please enter your email'),
+        ),
+        const SizedBox(
+          height: 30,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  _selectedCard = ToggleBetweenCards.logIn;
+                });
+              },
+              child: Text(
+                'Back',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                if (!_emailControllerKey.currentState!.validate()) return;
+                // TODO: Verify email exists
+                // TODO: Navigate to OTP screen + send OTP to email
+              },
+              child: Text(
+                'Proceed',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
 
   //=====================Flutter Override Methods==============================
   @override

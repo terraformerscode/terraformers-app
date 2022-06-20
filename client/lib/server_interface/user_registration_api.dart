@@ -53,4 +53,12 @@ class UserRegistrationAPI {
         'terraformersAuthToken', parseResponse["terraformersAuthToken"]);
     return loggedIn;
   }
+
+  static void checkToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? authToken = prefs.getString("terraformersAuthToken");
+    if (authToken == null) return;
+    // TODO: RETURN BOOLEAN AND GET BUILD TO PUSH NAVIGATOR
+    // Navigator.of(context).
+  }
 }
