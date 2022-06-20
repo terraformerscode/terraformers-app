@@ -5,6 +5,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 class UserRegistrationAPI {
   static var homeUrl = "http://10.0.2.2:5000";
 
+  // TODO: Put in .env file
+  static var auth0ClientID = 'WAokWY98Pim7IsbERw2gp8XfEbcwmTAn';
+  static var auth0Url = 'https://dev-gxfk8w7z.us.auth0.com';
+
   static signUp(email, username, password) async {
     var url = "$homeUrl/signup";
 
@@ -54,11 +58,37 @@ class UserRegistrationAPI {
     return loggedIn;
   }
 
+  static Future<bool> sendResetOTP(email) async {
+    var url = "$auth0Url/passwordless/start";
+
+    final response = await http
+        .post(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'client_id': auth0ClientID,
+        'connection': 'email',
+        'email': email,
+        'send': 'code'
+      }),
+    )
+        .then((value) {
+      print(value);
+      return true;
+    }).catchError((err) {
+      print(err);
+      return false;
+    });
+
+    return false;
+  }
+
+  // TODO: Incomplete - Check token and authenticate user
   static void checkToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? authToken = prefs.getString("terraformersAuthToken");
     if (authToken == null) return;
-    // TODO: RETURN BOOLEAN AND GET BUILD TO PUSH NAVIGATOR
-    // Navigator.of(context).
   }
 }
