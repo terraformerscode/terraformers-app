@@ -4,9 +4,11 @@ import 'package:client/main.dart';
 import 'package:client/server_interface/user_registration_API.dart';
 import 'package:client/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttericon/octicons_icons.dart';
 import 'package:http/http.dart' as http;
 import 'package:page_transition/page_transition.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../components/otp_input.dart';
@@ -31,6 +33,7 @@ enum ToggleBetweenCards {
 
 class _LoginPageState extends State<LoginPage> {
   late Image _globeYellow;
+  TerraformersConst TFConsts = TerraformersConst();
 
   late TextEditingController _emailController;
   late TextEditingController _usernameController;
@@ -417,7 +420,7 @@ you will be directed to the registration page!''',
               child: Text(
                 'here.',
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      color: TerraformersConst().yellow,
+                      color: TFConsts.yellow,
                     ),
               ),
             ),
@@ -501,10 +504,11 @@ to reset your password!''',
   Widget otpCard() {
     String? otp;
     // 4 text editing controllers that associate with the 4 input fields
-    final TextEditingController fieldOne = TextEditingController();
-    final TextEditingController fieldTwo = TextEditingController();
-    final TextEditingController fieldThree = TextEditingController();
-    final TextEditingController fieldFour = TextEditingController();
+    // final TextEditingController fieldOne = TextEditingController();
+    // final TextEditingController fieldTwo = TextEditingController();
+    // final TextEditingController fieldThree = TextEditingController();
+    // final TextEditingController fieldFour = TextEditingController();
+    final TextEditingController otpField = TextEditingController();
     return Column(
       children: [
         Text(
@@ -518,14 +522,44 @@ to reset your password!''',
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 30),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            OtpInput(fieldOne, true),
-            OtpInput(fieldTwo, false),
-            OtpInput(fieldThree, false),
-            OtpInput(fieldFour, false)
-          ],
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        //   children: [
+        //     OtpInput(fieldOne, true),
+        //     OtpInput(fieldTwo, false),
+        //     OtpInput(fieldThree, false),
+        //     OtpInput(fieldFour, false)
+        //   ],
+        // ),
+        PinCodeTextField(
+          length: 6,
+          obscureText: false,
+          animationType: AnimationType.fade,
+          keyboardType: TextInputType.number,
+          pinTheme: PinTheme(
+              shape: PinCodeFieldShape.box,
+              borderRadius: BorderRadius.circular(5),
+              fieldHeight: 50,
+              fieldWidth: 40,
+              activeFillColor: Colors.white,
+              activeColor: TFConsts.lightBlue,
+              selectedColor: TFConsts.yellow,
+              inactiveColor: TFConsts.lightBlue),
+          animationDuration: const Duration(milliseconds: 300),
+          controller: otpField,
+          onCompleted: (v) {
+            //TODO: VERIFY OTP
+            debugPrint("OTP Entered");
+            setState(() {
+              _selectedCard = ToggleBetweenCards.resetPassword;
+            });
+          },
+          onChanged: (value) {},
+          beforeTextPaste: (text) {
+            if (text == null) return false;
+            return int.tryParse(text) != null;
+          },
+          appContext: context,
         ),
         const SizedBox(
           height: 30,
@@ -545,25 +579,18 @@ to reset your password!''',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
-            ElevatedButton(
-              //TODO: Check if all fields are non-empty
-              onPressed: () async {
-                setState(() {
-                  otp = fieldOne.text +
-                      fieldTwo.text +
-                      fieldThree.text +
-                      fieldFour.text;
-                });
-                // TODO: Verify OTP
-                setState(() {
-                  _selectedCard = ToggleBetweenCards.resetPassword;
-                });
-              },
-              child: Text(
-                'Submit',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-            ),
+            // ElevatedButton(
+            //   onPressed: () async {
+            //     // TODO: Verify OTP
+            //     setState(() {
+            //       _selectedCard = ToggleBetweenCards.resetPassword;
+            //     });
+            //   },
+            //   child: Text(
+            //     'Submit',
+            //     style: Theme.of(context).textTheme.titleLarge,
+            //   ),
+            // ),
           ],
         ),
       ],
@@ -592,10 +619,10 @@ to reset your password!''',
             _resetpasswordControllerKey.currentState!.validate();
           },
           validator: (pwd) {
-              return (_resetpasswordController.text.length < 8)
-                  ? "Password needs to be at least 8 characters long"
-                  : null;
-            },
+            return (_resetpasswordController.text.length < 8)
+                ? "Password needs to be at least 8 characters long"
+                : null;
+          },
           decoration: const InputDecoration(
             labelText: 'New Password',
             hintText: 'Please enter your new password',
@@ -610,8 +637,8 @@ to reset your password!''',
           },
           validator: (cfmpassword) {
             return (_resetpasswordController.text != cfmpassword)
-              ? "Password does not match the one above"
-              : null;
+                ? "Password does not match the one above"
+                : null;
           },
           decoration: const InputDecoration(
             labelText: 'Confirm Password',

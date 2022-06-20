@@ -1,6 +1,7 @@
 // Create an input widget that takes only one digit
 import 'package:client/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 
 class OtpInput extends StatelessWidget {
   final TextEditingController controller;
