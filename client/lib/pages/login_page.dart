@@ -387,24 +387,30 @@ you will be directed to the registration page!''',
             ),
           ],
         ),
-        const SizedBox(height: 30),
-        Row(children: [
-          Text(
-            'Forgot your password? ',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          InkWell(
-            onTap: () {
-              setState(() {
-                _selectedCard = ToggleBetweenCards.forgotPassword;
-              });
-            },
-            child: Text(
-              'Click here',
+        const SizedBox(height: 40),
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Forgot your password? Click ',
               style: Theme.of(context).textTheme.titleMedium,
             ),
-          ),
-        ])
+            InkWell(
+              onTap: () {
+                setState(() {
+                  _selectedCard = ToggleBetweenCards.forgotPassword;
+                });
+              },
+              child: Text(
+                'here.',
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                  color: const Color.fromARGB(255, 255, 187, 0),
+                ),
+              ),
+            ),
+          ],
+        )
       ],
     );
   }
