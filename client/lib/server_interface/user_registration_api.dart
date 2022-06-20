@@ -8,6 +8,8 @@ class UserRegistrationAPI {
   // TODO: Put in .env file
   static var auth0ClientID = 'WAokWY98Pim7IsbERw2gp8XfEbcwmTAn';
   static var auth0Url = 'https://dev-gxfk8w7z.us.auth0.com';
+  static var auth0OTPGrantType =
+      'http://auth0.com/oauth/grant-type/passwordless/otp';
 
   static signUp(email, username, password) async {
     var url = "$homeUrl/signup";
@@ -72,6 +74,36 @@ class UserRegistrationAPI {
         'connection': 'email',
         'email': email,
         'send': 'code'
+      }),
+    )
+        .then((value) {
+      print(value);
+      return true;
+    }).catchError((err) {
+      print(err);
+      return false;
+    });
+
+    return false;
+  }
+
+  static Future<bool> verifyResetOTP(email) async {
+    var url = "$auth0Url/oauth/token";
+
+    final response = await http
+        .post(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'grant_type': auth0OTPGrantType,
+        'client_id': auth0ClientID,
+        'username': email,
+        'otp': 'code',
+        'realm': 'email',
+        // 'audience': 'your-api-audience',
+        'scope': 'openid profile email',
       }),
     )
         .then((value) {
