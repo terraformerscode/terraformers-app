@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../components/otp_input.dart';
 import 'landing_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -35,6 +36,8 @@ class _LoginPageState extends State<LoginPage> {
   late TextEditingController _usernameController;
   late TextEditingController _passwordController;
   late TextEditingController _cfmpasswordController;
+  late TextEditingController _resetpasswordController;
+  late TextEditingController _cfmresetpasswordController;
 
   late ToggleBetweenCards _selectedCard;
 
@@ -478,11 +481,12 @@ to reset your password!''',
                 // TODO: Verify email exists
                 // TODO: Navigate to OTP screen + send OTP to email
                 setState(() {
-                  _selectedCard = ToggleBetweenCards.forgotPasswordOTPVerification;
+                  _selectedCard =
+                      ToggleBetweenCards.forgotPasswordOTPVerification;
                 });
               },
               child: Text(
-                'Proceed',
+                'Send OTP',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
@@ -493,7 +497,12 @@ to reset your password!''',
   }
 
   Widget otpCard() {
-    //TODO: Make better input decoration for buttons
+    String? otp;
+    // 4 text editing controllers that associate with the 4 input fields
+    final TextEditingController fieldOne = TextEditingController();
+    final TextEditingController fieldTwo = TextEditingController();
+    final TextEditingController fieldThree = TextEditingController();
+    final TextEditingController fieldFour = TextEditingController();
     return Column(
       children: [
         Text(
@@ -507,19 +516,14 @@ to reset your password!''',
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 30),
-        TextFormField(
-          key: _emailControllerKey,
-          controller: _emailController,
-          onChanged: (value) {
-            _emailControllerKey.currentState!.validate();
-          },
-          validator: (email) {
-            return (!emailRegExp.hasMatch(email!) || email.isEmpty)
-                ? "Please enter a valid email"
-                : null;
-          },
-          decoration: const InputDecoration(
-              labelText: 'Email', hintText: 'Please enter your email'),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            OtpInput(fieldOne, true),
+            OtpInput(fieldTwo, false),
+            OtpInput(fieldThree, false),
+            OtpInput(fieldFour, false)
+          ],
         ),
         const SizedBox(
           height: 30,
@@ -540,15 +544,21 @@ to reset your password!''',
               ),
             ),
             ElevatedButton(
+              //TODO: Check if all fields are non-empty
               onPressed: () async {
-                if (!_emailControllerKey.currentState!.validate()) return;
+                setState(() {
+                  otp = fieldOne.text +
+                      fieldTwo.text +
+                      fieldThree.text +
+                      fieldFour.text;
+                });
                 // TODO: Verify OTP
                 setState(() {
                   _selectedCard = ToggleBetweenCards.resetPassword;
                 });
               },
               child: Text(
-                'Proceed',
+                'Submit',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
@@ -600,7 +610,7 @@ to reset your password!''',
             ElevatedButton(
               onPressed: () {
                 setState(() {
-                  _selectedCard = ToggleBetweenCards.resetPassword;
+                  _selectedCard = ToggleBetweenCards.forgotPassword;
                 });
               },
               child: Text(
@@ -634,10 +644,14 @@ to reset your password!''',
       AppImagesPath.globeYellow,
       fit: BoxFit.fitHeight,
     );
+
     _emailController = TextEditingController();
     _usernameController = TextEditingController();
     _passwordController = TextEditingController();
     _cfmpasswordController = TextEditingController();
+    _resetpasswordController = TextEditingController();
+    _cfmresetpasswordController = TextEditingController();
+
     _selectedCard = ToggleBetweenCards.continueWithEmail;
     super.initState();
   }
@@ -648,6 +662,8 @@ to reset your password!''',
     _usernameController.dispose();
     _passwordController.dispose();
     _cfmpasswordController.dispose();
+    _resetpasswordController.dispose();
+    _cfmresetpasswordController.dispose();
     super.dispose();
   }
 

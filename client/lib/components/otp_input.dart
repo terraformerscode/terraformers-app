@@ -1,4 +1,5 @@
 // Create an input widget that takes only one digit
+import 'package:client/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class OtpInput extends StatelessWidget {
@@ -17,10 +18,14 @@ class OtpInput extends StatelessWidget {
         keyboardType: TextInputType.number,
         controller: controller,
         maxLength: 1,
-        decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            counterText: '',
-            hintStyle: TextStyle(color: Colors.black, fontSize: 20.0)),
+        decoration: InputDecoration(
+          border: const OutlineInputBorder(),
+          counterText: '',
+          hintStyle: TextStyle(
+            color: TerraformersConst().yellow,
+            fontSize: 20.0
+          ),
+        ),
         onChanged: (value) {
           if (value.length == 1) {
             FocusScope.of(context).nextFocus();
