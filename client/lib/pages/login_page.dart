@@ -53,17 +53,29 @@ class _LoginPageState extends State<LoginPage> {
 
   //=============Routes===================================================
   void _landingPageRoute() {
-    Navigator.push(
-      context,
-      PageTransition(
-          type: PageTransitionType.rightToLeftWithFade,
-          child: const LandingPage(),
-          duration: const Duration(milliseconds: 750),
-          reverseDuration: const Duration(milliseconds: 500)),
-    );
+    Navigator.of(context).pushAndRemoveUntil(
+        PageTransition(
+            type: PageTransitionType.rightToLeftWithFade,
+            child: const LandingPage(),
+            duration: const Duration(milliseconds: 750),
+            reverseDuration: const Duration(milliseconds: 500)),
+        (route) => false);
   }
 
-  //=========================User Auth Methods=============================
+  //=========================Snackbar Methods=============================
+  void successFailSnackBar(bool cond, String successText, String failText) {
+    if (!cond) {
+      SnackBar failedSnackbar = SnackBar(
+        content: Text(failText),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(failedSnackbar);
+      return;
+    }
+    SnackBar successSnackbar = SnackBar(
+      content: Text(successText),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(successSnackbar);
+  }
 
   //=========================Cards=======================================
   Widget currentDisplayCard() {
@@ -384,9 +396,7 @@ you will be directed to the registration page!''',
                   ScaffoldMessenger.of(context).showSnackBar(logInFailed);
                   return;
                 }
-
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    routesMap[Pages.landingPage]!, (route) => false);
+                _landingPageRoute();
               },
               child: Center(
                 child: Text(
@@ -480,7 +490,13 @@ to reset your password!''',
                 if (!_emailControllerKey.currentState!.validate()) return;
                 // TODO: Verify email exists
 
-                UserRegistrationAPI.sendResetOTP(_emailController.text);
+                bool otpSent = await UserRegistrationAPI.sendResetOTP(
+                    _emailController.text);
+                successFailSnackBar(
+                    otpSent,
+                    "OTP Sent to ${_emailController.text}",
+                    "Failed sending OTP");
+
                 setState(() {
                   _selectedCard =
                       ToggleBetweenCards.forgotPasswordOTPVerification;
@@ -530,16 +546,11 @@ to reset your password!''',
           animationDuration: const Duration(milliseconds: 300),
           controller: otpField,
           onCompleted: (otp) async {
-            //TODO: VERIFY OTP
             bool verified = await UserRegistrationAPI.verifyResetOTP(
                 _emailController.text, otp);
-            if (!verified) {
-              SnackBar logInFailed = const SnackBar(
-                content: Text("OTP Verification Failed"),
-              );
-              ScaffoldMessenger.of(context).showSnackBar(logInFailed);
-              return;
-            }
+            successFailSnackBar(
+                verified, "Verified!", "OTP Verification Failed");
+
             setState(() {
               _selectedCard = ToggleBetweenCards.resetPassword;
             });
@@ -569,18 +580,6 @@ to reset your password!''',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
-            // ElevatedButton(
-            //   onPressed: () async {
-            //     // TODO: Verify OTP
-            //     setState(() {
-            //       _selectedCard = ToggleBetweenCards.resetPassword;
-            //     });
-            //   },
-            //   child: Text(
-            //     'Submit',
-            //     style: Theme.of(context).textTheme.titleLarge,
-            //   ),
-            // ),
           ],
         ),
       ],
@@ -655,7 +654,18 @@ to reset your password!''',
             ),
             ElevatedButton(
               onPressed: () async {
-                // TODO: Update password
+                if (!_cfmresetpasswordControllerKey.currentState!.validate() 
+                  || !_resetpasswordControllerKey.currentState!.validate()) {
+                  return;
+                }
+
+                bool resetSuccess = await UserRegistrationAPI.resetPassword(
+                    _emailController.text, _resetpasswordController.text);
+                successFailSnackBar(
+                    resetSuccess,
+                    "Password Reset! Log In again",
+                    "Password Reset Failed. Try Again.");
+                  
                 setState(() {
                   _selectedCard = ToggleBetweenCards.logIn;
                 });

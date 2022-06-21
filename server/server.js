@@ -26,8 +26,8 @@ app.use(express.json({ extended: false }));
 app.get('/', (req, res) => res.send('Hello World!'));
 
 // User model
-const schema = new mongoose.Schema({ email: 'string', username: 'string', password: 'string' });
-const User = mongoose.model('User', schema, 'testUsers');
+const userSchema = new mongoose.Schema({ email: 'string', username: 'string', password: 'string' });
+const User = mongoose.model('User', userSchema, 'testUsers');
 
 // Hashing
 var saltRounds = 15;
@@ -84,6 +84,31 @@ app.post('/login', async (req, res) => {
     });
 });
 
-// reset
+// reset password route api
+app.put('/resetPassword', async (req, res) => {
+    const { email, password } = req.body;
+
+    const hashPwd = await bcrypt.hash(password, saltRounds)
+        .then(hash => {
+            return hash;
+        })
+        .catch(err => {
+            console.log(err);
+            return null;
+        })
+        ?? "Hashing failed";
+
+    let user = await User.findOne({ email: email });
+    var resetSuccess = false;
+    if (user != null) {
+        user.password = hashPwd;
+        await user.save();
+        resetSuccess = true;
+    }
+
+    res.json({
+        resetSuccess: resetSuccess,
+    });
+});
 
 app.listen(5000, () => console.log('Listening on port 5000...'));

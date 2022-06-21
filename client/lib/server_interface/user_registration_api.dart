@@ -63,6 +63,7 @@ class UserRegistrationAPI {
 
   static Future<bool> sendResetOTP(email) async {
     var url = "$auth0Url/passwordless/start";
+    var success = false;
 
     final response = await http
         .post(
@@ -78,12 +79,12 @@ class UserRegistrationAPI {
       }),
     )
         .then((value) {
-      return true;
+      success = true;
     }).catchError((err) {
-      return false;
+      success = false;
     });
 
-    return false;
+    return success;
   }
 
   static Future<bool> verifyResetOTP(email, otp) async {
@@ -113,6 +114,29 @@ class UserRegistrationAPI {
     });
 
     return verified;
+  }
+
+  static Future<bool> resetPassword(email, password) async {
+    var url = "$homeUrl/resetPassword";
+
+    final response = await http.put(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'email': email,
+        'password': password,
+      }),
+    );
+
+    var parseResponse = jsonDecode(response.body);
+
+    var success = false;
+    if (parseResponse["resetSuccess"]) {
+      success = true;
+    }
+    return success;
   }
 
   // TODO: Incomplete - Check token and authenticate user
