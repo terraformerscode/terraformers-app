@@ -78,10 +78,8 @@ class UserRegistrationAPI {
       }),
     )
         .then((value) {
-      print(value);
       return true;
     }).catchError((err) {
-      print(err);
       return false;
     });
 
@@ -90,6 +88,7 @@ class UserRegistrationAPI {
 
   static Future<bool> verifyResetOTP(email, otp) async {
     var url = "$auth0Url/oauth/token";
+    var verified = false;
 
     final response = await http
         .post(
@@ -108,14 +107,12 @@ class UserRegistrationAPI {
       }),
     )
         .then((value) {
-      print(value);
-      return true;
+      verified = true;
     }).catchError((err) {
-      print(err);
-      return false;
+      verified = false;
     });
 
-    return false;
+    return verified;
   }
 
   // TODO: Incomplete - Check token and authenticate user

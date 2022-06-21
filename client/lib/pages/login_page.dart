@@ -1,17 +1,12 @@
 import 'dart:convert';
 import 'package:client/appimagespath.dart';
 import 'package:client/main.dart';
-import 'package:client/server_interface/user_registration_API.dart';
+import 'package:client/server_interface/user_registration_api.dart';
 import 'package:client/utils/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:fluttericon/octicons_icons.dart';
-import 'package:http/http.dart' as http;
 import 'package:page_transition/page_transition.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../components/otp_input.dart';
 import 'landing_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -484,7 +479,8 @@ to reset your password!''',
               onPressed: () async {
                 if (!_emailControllerKey.currentState!.validate()) return;
                 // TODO: Verify email exists
-                // TODO: Navigate to OTP screen + send OTP to email
+
+                UserRegistrationAPI.sendResetOTP(_emailController.text);
                 setState(() {
                   _selectedCard =
                       ToggleBetweenCards.forgotPasswordOTPVerification;
@@ -503,11 +499,6 @@ to reset your password!''',
 
   Widget otpCard() {
     String? otp;
-    // 4 text editing controllers that associate with the 4 input fields
-    // final TextEditingController fieldOne = TextEditingController();
-    // final TextEditingController fieldTwo = TextEditingController();
-    // final TextEditingController fieldThree = TextEditingController();
-    // final TextEditingController fieldFour = TextEditingController();
     final TextEditingController otpField = TextEditingController();
     return Column(
       children: [
@@ -517,20 +508,11 @@ to reset your password!''',
         ),
         const SizedBox(height: 20),
         Text(
-          '''Enter the OTP sent to your email''',
+          '''Enter the OTP sent by Auth0 to your email''',
           style: Theme.of(context).textTheme.bodyLarge,
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 30),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        //   children: [
-        //     OtpInput(fieldOne, true),
-        //     OtpInput(fieldTwo, false),
-        //     OtpInput(fieldThree, false),
-        //     OtpInput(fieldFour, false)
-        //   ],
-        // ),
         PinCodeTextField(
           length: 6,
           obscureText: false,
@@ -547,9 +529,17 @@ to reset your password!''',
               inactiveColor: TFConsts.lightBlue),
           animationDuration: const Duration(milliseconds: 300),
           controller: otpField,
-          onCompleted: (v) {
+          onCompleted: (otp) async {
             //TODO: VERIFY OTP
-            debugPrint("OTP Entered");
+            bool verified = await UserRegistrationAPI.verifyResetOTP(
+                _emailController.text, otp);
+            if (!verified) {
+              SnackBar logInFailed = const SnackBar(
+                content: Text("OTP Verification Failed"),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(logInFailed);
+              return;
+            }
             setState(() {
               _selectedCard = ToggleBetweenCards.resetPassword;
             });
