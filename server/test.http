@@ -7,10 +7,24 @@
 #     "password": "praveen88"
 # }
 
-POST http://localhost:5000/login HTTP/1.1
+POST https://dev-gxfk8w7z.us.auth0.com/passwordless/start HTTP/1.1
 Content-Type: application/json
 
 {
-    "email": "praveen82@gmail.com",
-    "password": "praveen88"
+    "client_id": "WAokWY98Pim7IsbERw2gp8XfEbcwmTAn",
+    "connection": "email",
+    "email": "pravedino@gmail.com",
+    "send": "code"
+}
+
+
+POST https://dev-gxfk8w7z.us.auth0.com/oauth/token HTTP/1.1
+Content-Type: application/json
+
+{
+    "grant_type": "http://auth0.com/oauth/grant-type/passwordless/otp",
+    "client_id": "WAokWY98Pim7IsbERw2gp8XfEbcwmTAn",
+    "username": "pravedino@gmail.com",
+    "otp": "code",
+    "realm": "email",
 }

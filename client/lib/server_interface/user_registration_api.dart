@@ -10,6 +10,7 @@ class UserRegistrationAPI {
   static var auth0Url = 'https://dev-gxfk8w7z.us.auth0.com';
   static var auth0OTPGrantType =
       'http://auth0.com/oauth/grant-type/passwordless/otp';
+  static var auth0ManagementAPI = 'https://dev-gxfk8w7z.us.auth0.com/api/v2/';
 
   static signUp(email, username, password) async {
     var url = "$homeUrl/signup";
@@ -87,7 +88,7 @@ class UserRegistrationAPI {
     return false;
   }
 
-  static Future<bool> verifyResetOTP(email) async {
+  static Future<bool> verifyResetOTP(email, otp) async {
     var url = "$auth0Url/oauth/token";
 
     final response = await http
@@ -100,10 +101,10 @@ class UserRegistrationAPI {
         'grant_type': auth0OTPGrantType,
         'client_id': auth0ClientID,
         'username': email,
-        'otp': 'code',
+        'otp': otp,
         'realm': 'email',
-        // 'audience': 'your-api-audience',
-        'scope': 'openid profile email',
+        'audience': auth0ManagementAPI,
+        'scope': 'openid profile email'
       }),
     )
         .then((value) {
