@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'package:client/appimagespath.dart';
-import 'package:client/main.dart';
 import 'package:client/server_interface/user_registration_api.dart';
 import 'package:client/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +26,7 @@ enum ToggleBetweenCards {
 
 class _LoginPageState extends State<LoginPage> {
   late Image _globeYellow;
-  TerraformersConst TFConsts = TerraformersConst();
+  TerraformersConst tfConsts = TerraformersConst();
 
   late TextEditingController _emailController;
   late TextEditingController _usernameController;
@@ -396,7 +394,9 @@ you will be directed to the registration page!''',
                   ScaffoldMessenger.of(context).showSnackBar(logInFailed);
                   return;
                 }
+
                 _landingPageRoute();
+                dispose();
               },
               child: Center(
                 child: Text(
@@ -425,7 +425,7 @@ you will be directed to the registration page!''',
               child: Text(
                 'here.',
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      color: TFConsts.yellow,
+                      color: tfConsts.yellow,
                     ),
               ),
             ),
@@ -540,9 +540,9 @@ to reset your password!''',
               fieldHeight: 50,
               fieldWidth: 40,
               activeFillColor: Colors.white,
-              activeColor: TFConsts.lightBlue,
-              selectedColor: TFConsts.yellow,
-              inactiveColor: TFConsts.lightBlue),
+              activeColor: tfConsts.lightBlue,
+              selectedColor: tfConsts.yellow,
+              inactiveColor: tfConsts.lightBlue),
           animationDuration: const Duration(milliseconds: 300),
           controller: otpField,
           onCompleted: (otp) async {
@@ -654,8 +654,8 @@ to reset your password!''',
             ),
             ElevatedButton(
               onPressed: () async {
-                if (!_cfmresetpasswordControllerKey.currentState!.validate() 
-                  || !_resetpasswordControllerKey.currentState!.validate()) {
+                if (!_cfmresetpasswordControllerKey.currentState!.validate() ||
+                    !_resetpasswordControllerKey.currentState!.validate()) {
                   return;
                 }
 
@@ -665,7 +665,7 @@ to reset your password!''',
                     resetSuccess,
                     "Password Reset! Log In again",
                     "Password Reset Failed. Try Again.");
-                  
+
                 setState(() {
                   _selectedCard = ToggleBetweenCards.logIn;
                 });
