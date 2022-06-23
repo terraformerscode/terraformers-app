@@ -139,6 +139,28 @@ class UserRegistrationAPI {
     return success;
   }
 
+  static Future<bool> userExists(email, password) async {
+    var url = "$homeUrl/userExists";
+
+    final response = await http.put(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'email': email,
+      }),
+    );
+
+    var parseResponse = jsonDecode(response.body);
+
+    var exists = false;
+    if (parseResponse["userExists"]) {
+      exists = true;
+    }
+    return exists;
+  }
+
   // TODO: Incomplete - Check token and authenticate user
   static void checkToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

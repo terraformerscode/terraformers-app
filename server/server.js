@@ -111,4 +111,19 @@ app.put('/resetPassword', async (req, res) => {
     });
 });
 
+// reset password route api
+app.get('/userExists', async (req, res) => {
+    const { email } = req.body;
+
+    let user = await User.findOne({ email: email });
+    var exists = false;
+    if (user != null) {
+        exists = true;
+    }
+
+    res.json({
+        userExists: exists,
+    });
+});
+
 app.listen(5000, () => console.log('Listening on port 5000...'));
