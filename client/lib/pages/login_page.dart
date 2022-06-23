@@ -193,13 +193,12 @@ you will be directed to the registration page!''',
             ElevatedButton(
               onPressed: () async {
                 if (!_emailControllerKey.currentState!.validate()) return;
-                //TODO: Control Flow for emails
-                bool hasSignedUp = false;
-                if (!hasSignedUp) {
+                bool userExists =
+                    await UserRegistrationAPI.userExists(_emailController.text);
+                if (!userExists) {
                   setState(() {
                     _selectedCard = ToggleBetweenCards.signUp;
                   });
-                  // ignore: dead_code
                 } else {
                   setState(() {
                     _selectedCard = ToggleBetweenCards.logIn;

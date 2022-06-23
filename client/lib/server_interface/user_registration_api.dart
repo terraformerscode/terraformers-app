@@ -139,7 +139,7 @@ class UserRegistrationAPI {
     return success;
   }
 
-  static Future<bool> userExists(email, password) async {
+  static Future<bool> userExists(email) async {
     var url = "$homeUrl/userExists";
 
     final response = await http.put(
