@@ -111,8 +111,8 @@ app.put('/resetPassword', async (req, res) => {
     });
 });
 
-// reset password route api
-app.get('/userExists', async (req, res) => {
+// check if user exists route api
+app.put('/userExists', async (req, res) => {
     const { email } = req.body;
 
     let user = await User.findOne({ email: email });
@@ -122,7 +122,7 @@ app.get('/userExists', async (req, res) => {
     }
 
     res.json({
-        userExists: exists,
+        userExists: exists
     });
 });
 
