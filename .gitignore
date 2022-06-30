@@ -1,4 +1,4 @@
 server/.env
 
 # AWS Key
-server/TerraformersTestInstanceKey.pem
+server/TerraformersTestServerKey.pem
