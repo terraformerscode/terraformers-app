@@ -2,3 +2,6 @@ server/.env
 
 # AWS Key
 server/TerraformersTestServerKey.pem
+
+# AWS directory itself
+aws/*

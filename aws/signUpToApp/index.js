@@ -11,6 +11,7 @@ const bcrypt = require('bcrypt');
 
 exports.handler = async (event, context) => {
     let body;
+    let yo;
     let statusCode = '200';
     const headers = {
         'Content-Type': 'application/json',
