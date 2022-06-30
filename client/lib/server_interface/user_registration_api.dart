@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserRegistrationAPI {
-  static var homeUrl = "http://10.0.2.2:5000";
+  static var serverUrl = "http://18.236.212.60:80";
 
   // TODO: Put in .env file
   static var auth0ClientID = 'WAokWY98Pim7IsbERw2gp8XfEbcwmTAn';
@@ -13,7 +13,7 @@ class UserRegistrationAPI {
   static var auth0ManagementAPI = 'https://dev-gxfk8w7z.us.auth0.com/api/v2/';
 
   static signUp(email, username, password) async {
-    var url = "$homeUrl/signup";
+    var url = "$serverUrl/signup";
 
     final response = await http.post(
       Uri.parse(url),
@@ -34,7 +34,7 @@ class UserRegistrationAPI {
   }
 
   static Future<bool> logIn(email, password) async {
-    var url = "$homeUrl/login";
+    var url = "$serverUrl/login";
     var loggedIn = false;
 
     final response = await http.post(
@@ -117,7 +117,7 @@ class UserRegistrationAPI {
   }
 
   static Future<bool> resetPassword(email, password) async {
-    var url = "$homeUrl/resetPassword";
+    var url = "$serverUrl/resetPassword";
 
     final response = await http.put(
       Uri.parse(url),
@@ -140,7 +140,7 @@ class UserRegistrationAPI {
   }
 
   static Future<bool> userExists(email) async {
-    var url = "$homeUrl/userExists";
+    var url = "$serverUrl/userExists";
 
     final response = await http.put(
       Uri.parse(url),

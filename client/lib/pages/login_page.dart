@@ -396,7 +396,6 @@ you will be directed to the registration page!''',
                 }
 
                 _landingPageRoute();
-                dispose();
               },
               child: Center(
                 child: Text(
