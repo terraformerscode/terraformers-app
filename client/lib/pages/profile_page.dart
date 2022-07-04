@@ -1,3 +1,4 @@
+import 'package:client/utils/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -9,31 +10,6 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final _searchController = TextEditingController();
-  var _loading = false;
-  // Index for bottom nav bar
-  int _selectedIndex = 0;
-
-  // Routing for bottom nav bar
-  void _onItemTapped(int index) {
-    setState(() {
-      _loading = true;
-    });
-    switch (index) {
-      case 0:
-        // _navigatorKey.currentState!.pushNamed("/chat");
-        break;
-      case 1:
-        // _navigatorKey.currentState!.pushNamed("/addlisting");
-        break;
-      case 2:
-        // Navigator.of(context).pushNamed("/account");
-        break;
-    }
-    setState(() {
-      _selectedIndex = index;
-      _loading = false;
-    });
-  }
 
   @override
   void dispose() {
@@ -45,7 +21,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Landing Page"),
+        title: const Text("Profile Page"),
         centerTitle: true,
       ),
       body: Column(
@@ -57,24 +33,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _loading ? null : _onItemTapped,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: 'Chat',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add),
-            label: 'Add Listing',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.face_outlined),
-            label: 'User Profile',
-          ),
-        ],
-      ),
+      bottomNavigationBar: TFBottomNavBar().build(context),
     );
   }
 }

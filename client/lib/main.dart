@@ -21,7 +21,7 @@ enum Pages {
 var routesMap = <Pages, String>{
   Pages.splashPage: '/',
   Pages.loginPage: '/login',
-  Pages.profilePage: '/landing',
+  Pages.profilePage: '/profile',
 };
 
 class MyApp extends StatelessWidget {

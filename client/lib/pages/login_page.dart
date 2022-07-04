@@ -51,13 +51,12 @@ class _LoginPageState extends State<LoginPage> {
 
   //=============Routes===================================================
   void _profilePageRoute() {
-    Navigator.of(context).pushAndRemoveUntil(
+    Navigator.of(context).push(
         PageTransition(
             type: PageTransitionType.rightToLeftWithFade,
             child: const ProfilePage(),
             duration: const Duration(milliseconds: 750),
-            reverseDuration: const Duration(milliseconds: 500)),
-        (route) => false);
+            reverseDuration: const Duration(milliseconds: 500)));
   }
 
   //=========================Snackbar Methods=============================
