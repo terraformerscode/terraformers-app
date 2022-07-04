@@ -25,11 +25,6 @@ class UserRegistrationAPI {
         'password': password,
       }),
     );
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var parseToken = jsonDecode(response.body);
-    await prefs.setString(
-        'terraformersAuthToken', parseToken["terraformersAuthToken"]);
   }
 
   static Future<bool> logIn(email, password) async {

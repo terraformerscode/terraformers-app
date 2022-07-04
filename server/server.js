@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
+const jwt = require('jsonwebtoken');
 
 const mongoose = require('mongoose');
 const { ServerApiVersion } = require('mongodb');
@@ -54,9 +55,6 @@ app.post('/signup', async (req, res) => {
     console.log(user);
     await user.save();
 
-    // JSON Web Token: To be saved in local cache for user auth
-    res.json({terraformersAuthToken: "123456789"});
-
     //TODO: check db for duplicate email
 });
 
@@ -71,10 +69,13 @@ app.post('/login', async (req, res) => {
     if (user != null) {
         emailExists = true;
         pwdAuthenticated = await bcrypt.compare(password, user.password);
+    }
 
+    if (pwdAuthenticated) {
         // JSON Web Token: To be saved in local cache for user auth
-        // TODO: Put an actual token
-        authToken = "123456789";
+        jwtuser = { email : email }
+        authToken = jwt.sign(jwtuser, process.env.AUTH_TOKEN_SECRET);
+        console.log(email + ' logged in');
     }
 
     res.json({
@@ -125,5 +126,18 @@ app.put('/userExists', async (req, res) => {
         userExists: exists
     });
 });
+
+// authenticate token middleware
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    if (token == null) return res.sendStatus(401)
+
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, jwtuser) => {
+        if (err) return res.sendStatus(403)
+        req.jwtuser = jwtuser
+        next()
+    })
+}
 
 app.listen(5000, () => console.log('Listening on port 5000...'));
