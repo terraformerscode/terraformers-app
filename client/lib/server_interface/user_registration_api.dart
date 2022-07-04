@@ -1,16 +1,15 @@
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserRegistrationAPI {
   static var serverUrl = "http://18.236.212.60:80";
 
-  // TODO: Put in .env file
-  static var auth0ClientID = 'WAokWY98Pim7IsbERw2gp8XfEbcwmTAn';
-  static var auth0Url = 'https://dev-gxfk8w7z.us.auth0.com';
-  static var auth0OTPGrantType =
-      'http://auth0.com/oauth/grant-type/passwordless/otp';
-  static var auth0ManagementAPI = 'https://dev-gxfk8w7z.us.auth0.com/api/v2/';
+  static var auth0ClientID = dotenv.env['auth0ClientID'];
+  static var auth0Url = dotenv.env['auth0Url'];
+  static var auth0OTPGrantType = dotenv.env['auth0OTPGrantType'];
+  static var auth0ManagementAPI = dotenv.env['auth0ManagementAPI'];
 
   static signUp(email, username, password) async {
     var url = "$serverUrl/signup";
@@ -72,7 +71,7 @@ class UserRegistrationAPI {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
-        'client_id': auth0ClientID,
+        'client_id': auth0ClientID!,
         'connection': 'email',
         'email': email,
         'send': 'code'
@@ -98,12 +97,12 @@ class UserRegistrationAPI {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
-        'grant_type': auth0OTPGrantType,
-        'client_id': auth0ClientID,
+        'grant_type': auth0OTPGrantType!,
+        'client_id': auth0ClientID!,
         'username': email,
         'otp': otp,
         'realm': 'email',
-        'audience': auth0ManagementAPI,
+        'audience': auth0ManagementAPI!,
         'scope': 'openid profile email'
       }),
     )

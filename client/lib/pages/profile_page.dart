@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class LandingPage extends StatefulWidget {
-  const LandingPage({Key? key}) : super(key: key);
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({Key? key}) : super(key: key);
 
   @override
-  _LandingPageState createState() => _LandingPageState();
+  _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _LandingPageState extends State<LandingPage> {
+class _ProfilePageState extends State<ProfilePage> {
   final _searchController = TextEditingController();
   var _loading = false;
   // Index for bottom nav bar

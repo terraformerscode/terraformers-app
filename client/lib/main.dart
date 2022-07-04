@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:client/apptheme.dart';
-import 'package:client/pages/landing_page.dart';
+import 'package:client/pages/profile_page.dart';
 import 'package:client/pages/login_page.dart';
 import 'package:client/pages/splash_page.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 
 enum Pages {
   splashPage,
   loginPage,
-  landingPage,
+  profilePage,
 }
 
 var routesMap = <Pages, String>{
   Pages.splashPage: '/',
   Pages.loginPage: '/login',
-  Pages.landingPage: '/landing',
+  Pages.profilePage: '/landing',
 };
 
 class MyApp extends StatelessWidget {
@@ -34,7 +36,7 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         routesMap[Pages.splashPage]!: (_) => const SplashPage(),
         routesMap[Pages.loginPage]!: (_) => const LoginPage(),
-        routesMap[Pages.landingPage]!: (_) => const LandingPage(),
+        routesMap[Pages.profilePage]!: (_) => const ProfilePage(),
       },
     );
   }

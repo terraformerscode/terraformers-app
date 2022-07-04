@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'landing_page.dart';
+import 'profile_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -50,11 +50,11 @@ class _LoginPageState extends State<LoginPage> {
       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
 
   //=============Routes===================================================
-  void _landingPageRoute() {
+  void _profilePageRoute() {
     Navigator.of(context).pushAndRemoveUntil(
         PageTransition(
             type: PageTransitionType.rightToLeftWithFade,
-            child: const LandingPage(),
+            child: const ProfilePage(),
             duration: const Duration(milliseconds: 750),
             reverseDuration: const Duration(milliseconds: 500)),
         (route) => false);
@@ -395,7 +395,7 @@ you will be directed to the registration page!''',
                   return;
                 }
 
-                _landingPageRoute();
+                _profilePageRoute();
               },
               child: Center(
                 child: Text(
@@ -601,6 +601,7 @@ to reset your password!''',
         ),
         const SizedBox(height: 20),
         TextFormField(
+          obscureText: true,
           key: _resetpasswordControllerKey,
           controller: _resetpasswordController,
           onChanged: (pwd) {
@@ -618,6 +619,7 @@ to reset your password!''',
         ),
         const SizedBox(height: 30),
         TextFormField(
+          obscureText: true,
           key: _cfmresetpasswordControllerKey,
           controller: _cfmresetpasswordController,
           onChanged: (cfmpwd) {
