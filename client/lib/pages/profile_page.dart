@@ -1,3 +1,4 @@
+import 'package:client/utils/app_bar.dart';
 import 'package:client/utils/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -20,18 +21,24 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Profile Page"),
-        centerTitle: true,
-      ),
-      body: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Center(
-            child: Text("Items will be displayed here."),
+      appBar: TFAppBar().build(context, "Profile"),
+      body: SingleChildScrollView(
+        child: SizedBox(
+          // Phone screen's height and width to wrap column
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: const [
+                SizedBox(height: 100),
+                Text("Items")
+              ],
+            ),
           ),
-        ],
+        ),
       ),
       bottomNavigationBar: TFBottomNavBar().build(context),
     );
