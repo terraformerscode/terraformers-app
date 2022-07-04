@@ -33,6 +33,9 @@ const User = mongoose.model('User', userSchema, 'testUsers');
 // Hashing
 var saltRounds = 15;
 
+// TODO: CHANGE TO DATABASE STORAGE
+let refreshTokens = []
+
 // signup route api
 app.post('/signup', async (req, res) => {
     const { email, username, password } = req.body;
@@ -66,6 +69,7 @@ app.post('/login', async (req, res) => {
     var emailExists = false;
     var pwdAuthenticated = false;
     var authToken = "0";
+    var refreshToken = "0";
     if (user != null) {
         emailExists = true;
         pwdAuthenticated = await bcrypt.compare(password, user.password);
@@ -73,13 +77,15 @@ app.post('/login', async (req, res) => {
 
     if (pwdAuthenticated) {
         // JSON Web Token: To be saved in local cache for user auth
-        jwtuser = { email : email }
-        authToken = jwt.sign(jwtuser, process.env.AUTH_TOKEN_SECRET);
+        authToken = generateAccessToken(email);
+        refreshToken = generateRefreshToken(email);
+        refreshTokens.push(refreshToken);
         console.log(email + ' logged in');
     }
 
     res.json({
         terraformersAuthToken: authToken,
+        terraformersRefreshToken: refreshToken,
         pwdAuthenticated: pwdAuthenticated,
         emailExists: emailExists
     });
@@ -127,14 +133,50 @@ app.put('/userExists', async (req, res) => {
     });
 });
 
+// logout route api
+app.delete('/logout', (req, res) => {
+    refreshTokens = refreshTokens.filter(token => token !== req.body.terraformersRefreshToken)
+    res.sendStatus(204)
+})
+
+// regenerate access token
+app.post("/token", (req, res) => {
+    const refreshToken = req.body.terraformersRefreshToken
+    if (refreshToken == null) return res.sendStatus(401)
+    if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403)
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, jwtuser) => {
+        if (err) return res.sendStatus(403)
+        const authToken = generateAccessToken(jwtuser.email)
+        res.json({ terraformersAuthToken: authToken})
+    });
+});
+
+app.get("/posts", authenticateToken, (req, res) => {
+    res.json({ response: "Test"})
+})
+
+
+function generateAccessToken(email) {
+    jwtuser = { email : email }
+    return jwt.sign(jwtuser, process.env.AUTH_TOKEN_SECRET, { expiresIn: '15s'});
+}
+
+function generateRefreshToken(email) {
+    jwtuser = { email : email }
+    return jwt.sign(jwtuser, process.env.REFRESH_TOKEN_SECRET);
+}
+
 // authenticate token middleware
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
     if (token == null) return res.sendStatus(401)
 
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, jwtuser) => {
-        if (err) return res.sendStatus(403)
+    jwt.verify(token, process.env.AUTH_TOKEN_SECRET, (err, jwtuser) => {
+        if (err) {
+            console.log(err);
+            return res.sendStatus(403)
+        }
         req.jwtuser = jwtuser
         next()
     })

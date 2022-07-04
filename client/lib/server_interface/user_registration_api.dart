@@ -52,6 +52,9 @@ class UserRegistrationAPI {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString(
         'terraformersAuthToken', parseResponse["terraformersAuthToken"]);
+    await prefs.setString(
+        'terraformersRefreshToken', parseResponse["terraformersRefreshToken"]);
+        
     return loggedIn;
   }
 
@@ -153,12 +156,5 @@ class UserRegistrationAPI {
       exists = true;
     }
     return exists;
-  }
-
-  // TODO: Incomplete - Check token and authenticate user
-  static void checkToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? authToken = prefs.getString("terraformersAuthToken");
-    if (authToken == null) return;
   }
 }
