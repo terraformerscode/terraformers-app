@@ -1,3 +1,4 @@
+import 'package:client/server_interface/peppermint_API.dart';
 import 'package:client/utils/app_bar.dart';
 import 'package:client/utils/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
@@ -32,9 +33,17 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Column(
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: const [
-                SizedBox(height: 100),
-                Text("Items")
+              children: [
+                const SizedBox(height: 100),
+                ElevatedButton(
+                  onPressed: () {
+                    PeppermintAPI.getContracts();
+                  },
+                  child: Text(
+                    'Test',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                ),
               ],
             ),
           ),
