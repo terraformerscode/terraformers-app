@@ -151,10 +151,6 @@ app.post("/token", (req, res) => {
     });
 });
 
-app.get("/posts", authenticateToken, (req, res) => {
-    res.json({ response: "Test"})
-})
-
 
 function generateAccessToken(email) {
     jwtuser = { email : email }
