@@ -1,3 +1,4 @@
+import 'package:client/apptheme.dart';
 import 'package:client/main.dart';
 import 'package:flutter/material.dart';
 
@@ -45,6 +46,9 @@ class TFBottomNavBar {
   Widget build(BuildContext context, BottomNavBarOptions selectedOption) {
     _selectedIndex = optionToIndex(selectedOption);
     return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
+      unselectedItemColor: navBtnUnselectColor,
+      selectedItemColor: navBtnSelectColor,
       currentIndex: _selectedIndex,
       onTap: _loading
           ? null
