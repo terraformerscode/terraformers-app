@@ -49,7 +49,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
       ),
-      bottomNavigationBar: TFBottomNavBar().build(context),
+      bottomNavigationBar: TFBottomNavBar().build(context, BottomNavBarOptions.profile),
     );
   }
 }

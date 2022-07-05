@@ -1,10 +1,12 @@
 import 'package:client/main.dart';
 import 'package:flutter/material.dart';
 
+enum BottomNavBarOptions { home, countryVisa, community, profile }
+
 class TFBottomNavBar {
   var _loading = false;
   // Index for bottom nav bar
-  int _selectedIndex = 0;
+  late int _selectedIndex;
 
   // Routing for bottom nav bar
   void _onItemTapped(int index, BuildContext context) {
@@ -14,9 +16,12 @@ class TFBottomNavBar {
         Navigator.of(context).pushNamed(routesMap[Pages.profilePage]!);
         break;
       case 1:
-        Navigator.of(context).pushNamed(routesMap[Pages.profilePage]!);
+        Navigator.of(context).pushNamed(routesMap[Pages.countryVisaPage]!);
         break;
       case 2:
+        Navigator.of(context).pushNamed(routesMap[Pages.profilePage]!);
+        break;
+      case 3:
         Navigator.of(context).pushNamed(routesMap[Pages.profilePage]!);
         break;
     }
@@ -24,7 +29,21 @@ class TFBottomNavBar {
     _loading = false;
   }
 
-  Widget build(BuildContext context) {
+  int optionToIndex(BottomNavBarOptions selectedOption) {
+    switch (selectedOption) {
+      case BottomNavBarOptions.home:
+        return 0;
+      case BottomNavBarOptions.countryVisa:
+        return 1;
+      case BottomNavBarOptions.community:
+        return 2;
+      case BottomNavBarOptions.profile:
+        return 3;
+    }
+  }
+
+  Widget build(BuildContext context, BottomNavBarOptions selectedOption) {
+    _selectedIndex = optionToIndex(selectedOption);
     return BottomNavigationBar(
       currentIndex: _selectedIndex,
       onTap: _loading
@@ -34,15 +53,19 @@ class TFBottomNavBar {
             },
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'Home',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.map_outlined),
+          label: 'Country Visa',
+        ),
+        BottomNavigationBarItem(
           icon: Icon(Icons.chat),
-          label: 'Chat',
+          label: 'Community',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.add),
-          label: 'Add Listing',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.face_outlined),
+          icon: Icon(Icons.person_outline_rounded),
           label: 'User Profile',
         ),
       ],

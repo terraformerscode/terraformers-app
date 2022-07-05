@@ -55,7 +55,7 @@ class AppTheme {
         ),
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: bgNavy,
+        // backgroundColor: bgNavy,
         unselectedItemColor: navBtnUnselectColor,
         selectedItemColor: navBtnSelectColor,
       ),

@@ -1,4 +1,6 @@
 import 'package:client/pages/profile_page.dart';
+import 'package:client/utils/app_bar.dart';
+import 'package:client/utils/bottom_nav_bar.dart';
 import 'package:client/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -15,7 +17,7 @@ class _CountryVisaPageState extends State<CountryVisaPage> {
   
   //=========================Cards=======================================
   Widget currentDisplayCard() {
-    return const Text("Hi!");
+    return const Text("Country here");
   }
 
 
@@ -33,6 +35,7 @@ class _CountryVisaPageState extends State<CountryVisaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: TFAppBar().build(context, ""),
       body: SingleChildScrollView(
         child: SizedBox(
           // Phone screen's height and width to wrap column
@@ -52,6 +55,7 @@ class _CountryVisaPageState extends State<CountryVisaPage> {
           ),
         ),
       ),
+      bottomNavigationBar: TFBottomNavBar().build(context, BottomNavBarOptions.countryVisa),
     );
   }
 }
