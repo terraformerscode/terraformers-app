@@ -1,7 +1,11 @@
 import 'package:client/server_interface/peppermint_API.dart';
+import 'package:client/server_interface/user_registration_api.dart';
 import 'package:client/utils/app_bar.dart';
 import 'package:client/utils/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
+
+import 'login_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -12,6 +16,42 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final _searchController = TextEditingController();
+
+  //=================Authentication============
+  void _logout() async {
+    bool success = await UserRegistrationAPI.logout();
+    successFailSnackBar(success, "Logged out successfully",
+        "Failed to log out, please try again");
+    if (success) {
+      _loginRoute();
+    }
+  }
+
+  //=========================Snackbar Methods=============================
+  void successFailSnackBar(bool cond, String successText, String failText) {
+    if (!cond) {
+      SnackBar failedSnackbar = SnackBar(
+        content: Text(failText),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(failedSnackbar);
+      return;
+    }
+    SnackBar successSnackbar = SnackBar(
+      content: Text(successText),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(successSnackbar);
+  }
+
+  //=================Routes====================
+  void _loginRoute() {
+    Navigator.of(context).pushAndRemoveUntil(
+        PageTransition(
+            type: PageTransitionType.leftToRightWithFade,
+            child: const LoginPage(),
+            duration: const Duration(milliseconds: 750),
+            reverseDuration: const Duration(milliseconds: 500)),
+        (route) => false);
+  }
 
   @override
   void dispose() {
@@ -37,6 +77,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 const SizedBox(height: 100),
                 ElevatedButton(
                   onPressed: () {
+                    _logout();
                   },
                   child: Text(
                     'Logout',
@@ -48,7 +89,8 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
       ),
-      bottomNavigationBar: TFBottomNavBar().build(context, BottomNavBarOptions.profile),
+      bottomNavigationBar:
+          TFBottomNavBar().build(context, BottomNavBarOptions.profile),
     );
   }
 }

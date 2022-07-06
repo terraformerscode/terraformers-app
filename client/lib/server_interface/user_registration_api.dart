@@ -161,7 +161,7 @@ class UserRegistrationAPI {
 
   static Future<bool> loggedInUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? authToken = prefs.getString("terraformersAuthToken");
+    String authToken = prefs.getString("terraformersAuthToken") ?? "0";
 
     var url = "$serverUrl/loggedInUser";
     final response = await http.get(Uri.parse(url), headers: <String, String>{
@@ -172,6 +172,31 @@ class UserRegistrationAPI {
       return false;
     }
 
+    return true;
+  }
+
+  static Future<bool> logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String terraformersRefreshToken =
+        prefs.getString("terraformersRefreshToken") ?? "0";
+
+    var url = "$serverUrl/logout";
+    final response = await http.delete(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'terraformersRefreshToken': terraformersRefreshToken,
+      }),
+    );
+
+    if (response.statusCode != 204) {
+      return false;
+    }
+
+    prefs.setString("terraformersAuthToken", "");
+    prefs.setString("terraformersRefreshToken", "");
     return true;
   }
 }

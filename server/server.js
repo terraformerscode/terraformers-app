@@ -135,6 +135,7 @@ app.put('/userExists', async (req, res) => {
 
 // logout route api
 app.delete('/logout', (req, res) => {
+    console.log("user logged out")
     refreshTokens = refreshTokens.filter(token => token !== req.body.terraformersRefreshToken)
     res.sendStatus(204)
 })
@@ -175,7 +176,6 @@ function authenticateAuthToken(req, res, next) {
 
     jwt.verify(token, process.env.AUTH_TOKEN_SECRET, (err, jwtuser) => {
         if (err) {
-            console.log(err);
             return res.sendStatus(403)
         }
         req.jwtuser = jwtuser
