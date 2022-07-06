@@ -37,10 +37,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 const SizedBox(height: 100),
                 ElevatedButton(
                   onPressed: () {
-                    PeppermintAPI.getContracts();
                   },
                   child: Text(
-                    'Test',
+                    'Logout',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ),

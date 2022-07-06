@@ -8,6 +8,7 @@ class TFBottomNavBar {
   var _loading = false;
   // Index for bottom nav bar
   late int _selectedIndex;
+  Color borderColor = const Color.fromARGB(255, 127, 152, 156);
 
   // Routing for bottom nav bar
   void _onItemTapped(int index, BuildContext context) {
@@ -44,35 +45,39 @@ class TFBottomNavBar {
   }
 
   Widget build(BuildContext context, BottomNavBarOptions selectedOption) {
-    _selectedIndex = optionToIndex(selectedOption);
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      unselectedItemColor: navBtnUnselectColor,
-      selectedItemColor: navBtnSelectColor,
-      currentIndex: _selectedIndex,
-      onTap: _loading
-          ? null
-          : (index) {
-              _onItemTapped(index, context);
-            },
-      items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.map_outlined),
-          label: 'Country Visa',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.chat),
-          label: 'Community',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person_outline_rounded),
-          label: 'User Profile',
-        ),
-      ],
+    _selectedIndex = optionToIndex(selectedOption);  
+    return Container(
+      decoration: BoxDecoration(
+          border: Border(top: BorderSide(color: borderColor, width: 1.5))),
+      child: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        unselectedItemColor: navBtnUnselectColor,
+        selectedItemColor: navBtnSelectColor,
+        currentIndex: _selectedIndex,
+        onTap: _loading
+            ? null
+            : (index) {
+                _onItemTapped(index, context);
+              },
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.map_outlined),
+            label: 'Country Visa',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.chat),
+            label: 'Community',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline_rounded),
+            label: 'User Profile',
+          ),
+        ],
+      ),
     );
   }
 }

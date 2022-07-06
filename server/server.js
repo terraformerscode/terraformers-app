@@ -151,10 +151,15 @@ app.post("/token", (req, res) => {
     });
 });
 
+// reauthenticate logged in user
+app.get("/loggedInUser", authenticateAuthToken, (req, res) => {
+    res.sendStatus(204)
+})
+
 
 function generateAccessToken(email) {
     jwtuser = { email : email }
-    return jwt.sign(jwtuser, process.env.AUTH_TOKEN_SECRET, { expiresIn: '15s'});
+    return jwt.sign(jwtuser, process.env.AUTH_TOKEN_SECRET, { expiresIn: '15m'});
 }
 
 function generateRefreshToken(email) {
@@ -162,8 +167,8 @@ function generateRefreshToken(email) {
     return jwt.sign(jwtuser, process.env.REFRESH_TOKEN_SECRET);
 }
 
-// authenticate token middleware
-function authenticateToken(req, res, next) {
+// authenticate authtoken middleware
+function authenticateAuthToken(req, res, next) {
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
     if (token == null) return res.sendStatus(401)

@@ -4,7 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserRegistrationAPI {
-  static var serverUrl = "http://18.236.212.60:80";
+  // static var serverUrl = "http://18.236.212.60:80";
+  static var serverUrl = "http://10.0.2.2:5000";
 
   static var auth0ClientID = dotenv.env['auth0ClientID'];
   static var auth0Url = dotenv.env['auth0Url'];
@@ -54,7 +55,7 @@ class UserRegistrationAPI {
         'terraformersAuthToken', parseResponse["terraformersAuthToken"]);
     await prefs.setString(
         'terraformersRefreshToken', parseResponse["terraformersRefreshToken"]);
-        
+
     return loggedIn;
   }
 
@@ -156,5 +157,21 @@ class UserRegistrationAPI {
       exists = true;
     }
     return exists;
+  }
+
+  static Future<bool> loggedInUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? authToken = prefs.getString("terraformersAuthToken");
+
+    var url = "$serverUrl/loggedInUser";
+    final response = await http.get(Uri.parse(url), headers: <String, String>{
+      'Authorization': 'Bearer $authToken',
+    });
+
+    if (response.statusCode != 204) {
+      return false;
+    }
+
+    return true;
   }
 }

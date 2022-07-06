@@ -41,6 +41,15 @@ Content-Type: application/json
 }
 
 ###
+
+GET http://localhost:5000/logout HTTP/1.1
+Content-Type: application/json
+
+{
+    "terraformersRefreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InByYXZlZW44M0BnbWFpbC5jb20iLCJpYXQiOjE2NTY5Mjg5NzB9.SjM4tiivfgSEwTtDuLSxTX6aSgrl2lhI8yoze5psctI"
+}
+
+###
 # Auth 0 tests
 
 POST https://dev-gxfk8w7z.us.auth0.com/passwordless/start HTTP/1.1
