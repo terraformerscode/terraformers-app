@@ -1,6 +1,8 @@
 import 'package:client/appimagespath.dart';
 import 'package:client/server_interface/user_registration_api.dart';
 import 'package:client/utils/constants.dart';
+import 'package:client/utils/routes.dart';
+import 'package:client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -48,30 +50,6 @@ class _LoginPageState extends State<LoginPage> {
 
   RegExp emailRegExp = RegExp(
       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
-
-  //=============Routes===================================================
-  void _profilePageRoute() {
-    Navigator.of(context).push(PageTransition(
-        type: PageTransitionType.rightToLeftWithFade,
-        child: const ProfilePage(),
-        duration: const Duration(milliseconds: 750),
-        reverseDuration: const Duration(milliseconds: 500)));
-  }
-
-  //=========================Snackbar Methods=============================
-  void successFailSnackBar(bool cond, String successText, String failText) {
-    if (!cond) {
-      SnackBar failedSnackbar = SnackBar(
-        content: Text(failText),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(failedSnackbar);
-      return;
-    }
-    SnackBar successSnackbar = SnackBar(
-      content: Text(successText),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(successSnackbar);
-  }
 
   //=========================Cards=======================================
   Widget currentDisplayCard() {
@@ -393,7 +371,7 @@ you will be directed to the registration page!''',
                   return;
                 }
 
-                _profilePageRoute();
+                Routes.profileRoute(context, false);
               },
               child: Center(
                 child: Text(
@@ -489,10 +467,10 @@ to reset your password!''',
 
                 bool otpSent = await UserRegistrationAPI.sendResetOTP(
                     _emailController.text);
-                successFailSnackBar(
+                TFSnackBar.successFailSnackBar(
                     otpSent,
                     "OTP Sent to ${_emailController.text}",
-                    "Failed sending OTP");
+                    "Failed sending OTP", context);
 
                 setState(() {
                   _selectedCard =
@@ -545,8 +523,8 @@ to reset your password!''',
           onCompleted: (otp) async {
             bool verified = await UserRegistrationAPI.verifyResetOTP(
                 _emailController.text, otp);
-            successFailSnackBar(
-                verified, "Verified!", "OTP Verification Failed");
+            TFSnackBar.successFailSnackBar(
+                verified, "Verified!", "OTP Verification Failed", context);
 
             setState(() {
               _selectedCard = ToggleBetweenCards.resetPassword;
@@ -660,10 +638,10 @@ to reset your password!''',
 
                 bool resetSuccess = await UserRegistrationAPI.resetPassword(
                     _emailController.text, _resetpasswordController.text);
-                successFailSnackBar(
+                TFSnackBar.successFailSnackBar(
                     resetSuccess,
                     "Password Reset! Log In again",
-                    "Password Reset Failed. Try Again.");
+                    "Password Reset Failed. Try Again.", context);
 
                 setState(() {
                   _selectedCard = ToggleBetweenCards.logIn;

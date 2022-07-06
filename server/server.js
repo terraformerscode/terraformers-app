@@ -159,8 +159,9 @@ app.get("/loggedInUser", authenticateAuthToken, (req, res) => {
 
 
 function generateAccessToken(email) {
+    //TODO: Make the auth token expire during production
     jwtuser = { email : email }
-    return jwt.sign(jwtuser, process.env.AUTH_TOKEN_SECRET, { expiresIn: '15m'});
+    return jwt.sign(jwtuser, process.env.AUTH_TOKEN_SECRET/*, { expiresIn: '15m'}*/);
 }
 
 function generateRefreshToken(email) {

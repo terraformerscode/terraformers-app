@@ -2,6 +2,7 @@ import 'package:client/server_interface/peppermint_API.dart';
 import 'package:client/server_interface/user_registration_api.dart';
 import 'package:client/utils/app_bar.dart';
 import 'package:client/utils/bottom_nav_bar.dart';
+import 'package:client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -20,30 +21,15 @@ class _ProfilePageState extends State<ProfilePage> {
   //=================Authentication============
   void _logout() async {
     bool success = await UserRegistrationAPI.logout();
-    successFailSnackBar(success, "Logged out successfully",
-        "Failed to log out, please try again");
+    TFSnackBar.successFailSnackBar(success, "Logged out successfully",
+        "Failed to log out, please try again", context);
     if (success) {
-      _loginRoute();
+      _loginRouteLeftToRight();
     }
-  }
-
-  //=========================Snackbar Methods=============================
-  void successFailSnackBar(bool cond, String successText, String failText) {
-    if (!cond) {
-      SnackBar failedSnackbar = SnackBar(
-        content: Text(failText),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(failedSnackbar);
-      return;
-    }
-    SnackBar successSnackbar = SnackBar(
-      content: Text(successText),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(successSnackbar);
   }
 
   //=================Routes====================
-  void _loginRoute() {
+  void _loginRouteLeftToRight() {
     Navigator.of(context).pushAndRemoveUntil(
         PageTransition(
             type: PageTransitionType.leftToRightWithFade,

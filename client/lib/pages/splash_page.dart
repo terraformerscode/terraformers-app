@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:client/pages/profile_page.dart';
 import 'package:client/server_interface/user_registration_api.dart';
+import 'package:client/utils/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -18,31 +19,34 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   //=============Authentication================================
   Future<void Function()> _checkLoggedIn() {
-    return UserRegistrationAPI.loggedInUser().then((loggedIn) => 
-      loggedIn ? _profilePageRoute : _loginRoute);
+    bool pushReplacement = true;
+    return UserRegistrationAPI.loggedInUser().then((loggedIn) => () =>
+        loggedIn
+        ? Routes.profileRoute(context, pushReplacement)
+        : Routes.loginRoute(context, pushReplacement));
   }
 
-  //=============Routes================================
-  void _profilePageRoute() {
-    Navigator.of(context).pushReplacement(PageTransition(
-        type: PageTransitionType.rightToLeftWithFade,
-        child: const ProfilePage(),
-        duration: const Duration(milliseconds: 750),
-        reverseDuration: const Duration(milliseconds: 500)));
-  }
+  // //=============Routes================================
+  // void _profilePageRoute() {
+  //   Navigator.of(context).pushReplacement(PageTransition(
+  //       type: PageTransitionType.rightToLeftWithFade,
+  //       child: const ProfilePage(),
+  //       duration: const Duration(milliseconds: 750),
+  //       reverseDuration: const Duration(milliseconds: 500)));
+  // }
 
-  void _loginRoute() {
-    Navigator.of(context).pushReplacement(
-      PageTransition(
-          type: PageTransitionType.rightToLeftWithFade,
-          child: const LoginPage(),
-          duration: const Duration(milliseconds: 750),
-          reverseDuration: const Duration(milliseconds: 500)),
-    );
-  }
+  // void _loginRoute() {
+  //   Navigator.of(context).pushReplacement(
+  //     PageTransition(
+  //         type: PageTransitionType.rightToLeftWithFade,
+  //         child: const LoginPage(),
+  //         duration: const Duration(milliseconds: 750),
+  //         reverseDuration: const Duration(milliseconds: 500)),
+  //   );
+  // }
 
   Future<Timer> _startTime() async {
-    var duration = const Duration(seconds: 5);
+    var duration = const Duration(seconds: 2, milliseconds: 500);
     void Function() _nextRoute = await _checkLoggedIn();
     return Timer(duration, _nextRoute);
   }
