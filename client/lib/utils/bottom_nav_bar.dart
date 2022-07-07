@@ -1,5 +1,6 @@
 import 'package:client/apptheme.dart';
 import 'package:client/main.dart';
+import 'package:client/utils/routes.dart';
 import 'package:flutter/material.dart';
 
 enum BottomNavBarOptions { home, countryVisa, community, profile }
@@ -15,16 +16,16 @@ class TFBottomNavBar {
     _loading = true;
     switch (index) {
       case 0:
-        Navigator.of(context).pushNamed(routesMap[Pages.profilePage]!);
+        Routes.profileRoute(context, false);
         break;
       case 1:
-        Navigator.of(context).pushNamed(routesMap[Pages.countryVisaPage]!);
+        Routes.countryVisaRoute(context, false);
         break;
       case 2:
-        Navigator.of(context).pushNamed(routesMap[Pages.profilePage]!);
+        Routes.profileRoute(context, false);
         break;
       case 3:
-        Navigator.of(context).pushNamed(routesMap[Pages.profilePage]!);
+        Routes.profileRoute(context, false);
         break;
     }
     _selectedIndex = index;
@@ -45,7 +46,7 @@ class TFBottomNavBar {
   }
 
   Widget build(BuildContext context, BottomNavBarOptions selectedOption) {
-    _selectedIndex = optionToIndex(selectedOption);  
+    _selectedIndex = optionToIndex(selectedOption);
     return Container(
       decoration: BoxDecoration(
           border: Border(top: BorderSide(color: borderColor, width: 1.5))),

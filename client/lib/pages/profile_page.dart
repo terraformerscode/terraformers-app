@@ -1,4 +1,5 @@
-import 'package:client/server_interface/peppermint_API.dart';
+import 'package:client/utils/routes.dart';
+import 'package:client/web3/peppermint_API.dart';
 import 'package:client/server_interface/user_registration_api.dart';
 import 'package:client/utils/app_bar.dart';
 import 'package:client/utils/bottom_nav_bar.dart';
@@ -24,19 +25,8 @@ class _ProfilePageState extends State<ProfilePage> {
     TFSnackBar.successFailSnackBar(success, "Logged out successfully",
         "Failed to log out, please try again", context);
     if (success) {
-      _loginRouteLeftToRight();
+      Routes.loginRouteLeftToRight(context);
     }
-  }
-
-  //=================Routes====================
-  void _loginRouteLeftToRight() {
-    Navigator.of(context).pushAndRemoveUntil(
-        PageTransition(
-            type: PageTransitionType.leftToRightWithFade,
-            child: const LoginPage(),
-            duration: const Duration(milliseconds: 750),
-            reverseDuration: const Duration(milliseconds: 500)),
-        (route) => false);
   }
 
   @override
@@ -48,7 +38,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TFAppBar().build(context, "Profile"),
+      appBar: TFAppBars().buildGrey(context, "Profile"),
       body: SingleChildScrollView(
         child: SizedBox(
           // Phone screen's height and width to wrap column

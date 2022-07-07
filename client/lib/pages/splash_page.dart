@@ -26,25 +26,6 @@ class _SplashPageState extends State<SplashPage> {
         : Routes.loginRoute(context, pushReplacement));
   }
 
-  // //=============Routes================================
-  // void _profilePageRoute() {
-  //   Navigator.of(context).pushReplacement(PageTransition(
-  //       type: PageTransitionType.rightToLeftWithFade,
-  //       child: const ProfilePage(),
-  //       duration: const Duration(milliseconds: 750),
-  //       reverseDuration: const Duration(milliseconds: 500)));
-  // }
-
-  // void _loginRoute() {
-  //   Navigator.of(context).pushReplacement(
-  //     PageTransition(
-  //         type: PageTransitionType.rightToLeftWithFade,
-  //         child: const LoginPage(),
-  //         duration: const Duration(milliseconds: 750),
-  //         reverseDuration: const Duration(milliseconds: 500)),
-  //   );
-  // }
-
   Future<Timer> _startTime() async {
     var duration = const Duration(seconds: 2, milliseconds: 500);
     void Function() _nextRoute = await _checkLoggedIn();
