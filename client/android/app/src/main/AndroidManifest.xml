@@ -4,9 +4,8 @@
         android:label="client"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
-        <!-- TODO: Add your Google Maps API key here -->
         <meta-data android:name="com.google.android.geo.API_KEY"
-               android:value="AIzaSyBLgVVkpgWQZ9epgwZVgdrqXVwFAP3FWgc"/>
+               android:value="@string/GOOGLE_MAPS_API_KEY"/>
 
         <activity
             android:name=".MainActivity"
