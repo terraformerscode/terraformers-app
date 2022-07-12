@@ -17,14 +17,14 @@ enum Pages {
   splashPage,
   loginPage,
   profilePage,
-  countryVisaPage
+  countryVisaPage,
 }
 
 var routesMap = <Pages, String>{
   Pages.splashPage: '/',
   Pages.loginPage: '/login',
   Pages.profilePage: '/profile',
-  Pages.countryVisaPage: '/countryVisa'
+  Pages.countryVisaPage: '/countryVisa',
 };
 
 class MyApp extends StatelessWidget {

@@ -79,4 +79,5 @@ class Routes {
             duration: const Duration(milliseconds: 750),
             reverseDuration: const Duration(milliseconds: 500)));
   }
-}
+
+  }

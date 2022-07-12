@@ -47,7 +47,7 @@ class TFBottomNavBar {
 
   Widget build(BuildContext context, BottomNavBarOptions selectedOption) {
     _selectedIndex = optionToIndex(selectedOption);
-    return Container(
+    return Container( 
       decoration: BoxDecoration(
           border: Border(top: BorderSide(color: borderColor, width: 1.5))),
       child: BottomNavigationBar(
