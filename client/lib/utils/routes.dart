@@ -6,18 +6,18 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
 class Routes {
-  static bool sameRoute(
+  static bool currentRoute(
     BuildContext context,
     Pages page,
   ) {
     ModalRoute<Object?>? route = ModalRoute.of(context);
     String? routeName = route?.settings.name;
-    print(routeName);
+    print("Route name: $routeName");
     return routeName == routesMap[page] ? true : false;
   }
 
   static void profileRoute(BuildContext context, bool pushReplacement) {
-    if (sameRoute(context, Pages.profilePage)) {
+    if (currentRoute(context, Pages.profilePage)) {
       return;
     }
 
@@ -35,7 +35,7 @@ class Routes {
   }
 
   static void loginRoute(BuildContext context, bool pushReplacement) {
-    if (sameRoute(context, Pages.loginPage)) {
+    if (currentRoute(context, Pages.loginPage)) {
       return;
     }
 
@@ -63,7 +63,7 @@ class Routes {
   }
 
   static void countryVisaRoute(BuildContext context, bool pushReplacement) {
-    if (sameRoute(context, Pages.countryVisaPage)) {
+    if (currentRoute(context, Pages.countryVisaPage)) {
       return;
     }
 

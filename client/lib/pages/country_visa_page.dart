@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:client/pages/profile_page.dart';
+import 'package:client/server_interface/experience_details_api.dart';
 import 'package:client/utils/app_bar.dart';
 import 'package:client/utils/bottom_nav_bar.dart';
 import 'package:client/utils/constants.dart';
@@ -19,16 +22,37 @@ class CountryVisaPage extends StatefulWidget {
   _CountryVisaPageState createState() => _CountryVisaPageState();
 }
 
-GlobalKey<ScaffoldState> countryVisaScaffoldKey = GlobalKey<ScaffoldState>();
-
 class _CountryVisaPageState extends State<CountryVisaPage> {
   // Experience contains: location, title, tags, regenerative score (localised, authentic, intimate), description, photos
 
+  // SEARCH FLOW ==> Search for place, Get LATLNG of place,
+  // Search through village list for closest villages, Populate marker list
+
+  //TODO: Type cast properly (gives error for some reason)
+  late dynamic experienceDetails;
+
+  void getExperienceDetails() async {
+    print("Retrieving experience details");
+    experienceDetails = await ExperienceDetailsAPI.getExperienceDetails();
+    print("EXPERIENCE DETAILS: $experienceDetails");
+    if (mounted) {
+      setState(() {
+        experienceDetails.forEach((key, value) {
+          Marker tempMarker = Marker(
+              markerId: MarkerId(key),
+              position:
+                  LatLng(value["position"]["lat"], value["position"]["lng"]));
+          markersSet.add(tempMarker);
+        });
+      });
+    }
+  }
+
   //===================Google Maps=====================
   late GoogleMapController mapController;
-  final LatLng _center = const LatLng(1.290270, 103.851959);
-  Set<Marker> markersList = {};
-  String gmapsAPIkey = dotenv.env['GOOGLE_MAPS_API_KEY']!;
+  late LatLng _center;
+  late Set<Marker> markersSet;
+  late String gmapsAPIkey;
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -45,19 +69,18 @@ class _CountryVisaPageState extends State<CountryVisaPage> {
         strictbounds: false,
         types: [""],
         decoration:
-            const InputDecoration(hintText: 'Search Within Your Country'),
+            const InputDecoration(hintText: 'Search for nearby experiences'),
         onError: onSearchError,
         components: [Component(Component.country, "sg")]);
 
-    displayPrediction(p, countryVisaScaffoldKey.currentState);
+    displayPrediction(p);
   }
 
   void onSearchError(PlacesAutocompleteResponse response) {
     TFSnackBar.showSnackBar(message: response.errorMessage!, context: context);
   }
 
-  Future<void> displayPrediction(
-      Prediction? p, ScaffoldState? currentState) async {
+  Future<void> displayPrediction(Prediction? p) async {
     if (p == null) {
       TFSnackBar.showErrorSnackBar(
           message: "Enter a valid search place! (Must be within the country)",
@@ -75,8 +98,8 @@ class _CountryVisaPageState extends State<CountryVisaPage> {
     final lat = detail.result.geometry!.location.lat;
     final lng = detail.result.geometry!.location.lng;
 
-    markersList.clear();
-    markersList.add(
+    markersSet.clear();
+    markersSet.add(
       Marker(
         markerId: const MarkerId("0"),
         position: LatLng(lat, lng),
@@ -95,8 +118,8 @@ class _CountryVisaPageState extends State<CountryVisaPage> {
   Widget googleMapsCard() {
     return GoogleMap(
       onMapCreated: _onMapCreated,
-      markers: markersList,
-      mapType: MapType.satellite,
+      markers: markersSet,
+      mapType: MapType.hybrid,
       initialCameraPosition: CameraPosition(
         target: _center,
         zoom: 11.0,
@@ -113,7 +136,7 @@ class _CountryVisaPageState extends State<CountryVisaPage> {
           children: [
             ElevatedButton(
               onPressed: handleSearchPlaces,
-              child: const Text("Search Places"),
+              child: const Text("Search Experiences"),
             ),
             const Text("*You may only search\nwithin this country")
           ],
@@ -121,12 +144,17 @@ class _CountryVisaPageState extends State<CountryVisaPage> {
         const Expanded(child: SizedBox())
       ],
     );
-    
   }
 
   //=====================Flutter Override Methods==============================
   @override
   void initState() {
+    //TODO: Replace center with user location, IF they are in the same country
+    // ELSE use default centre for the country
+    _center = const LatLng(1.290270, 103.851959);
+    gmapsAPIkey = dotenv.env['GOOGLE_MAPS_API_KEY']!;
+    markersSet = {};
+    getExperienceDetails();
     super.initState();
   }
 
@@ -138,29 +166,26 @@ class _CountryVisaPageState extends State<CountryVisaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: countryVisaScaffoldKey,
       appBar: TFAppBars().buildMediumBlue(context, "Singapore"),
-      body: SingleChildScrollView(
-        child: SizedBox(
-          // Phone screen's height and width to wrap column
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 12),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 20),
-                searchPlacesButton(),
-                const SizedBox(height: 20),
-                Container(
-                    constraints: BoxConstraints(
-                        maxHeight: 300,
-                        maxWidth: MediaQuery.of(context).size.width - 20),
-                    child: googleMapsCard()),
-              ],
-            ),
+      body: SizedBox(
+        // Phone screen's height and width to wrap column
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 12),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 20),
+              searchPlacesButton(),
+              const SizedBox(height: 20),
+              Container(
+                  constraints: BoxConstraints(
+                      maxHeight: 300,
+                      maxWidth: MediaQuery.of(context).size.width - 20),
+                  child: googleMapsCard()),
+            ],
           ),
         ),
       ),
