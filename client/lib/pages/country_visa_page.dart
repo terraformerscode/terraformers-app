@@ -32,20 +32,43 @@ class _CountryVisaPageState extends State<CountryVisaPage> {
   late dynamic experienceDetails;
 
   void getExperienceDetails() async {
-    print("Retrieving experience details");
     experienceDetails = await ExperienceDetailsAPI.getExperienceDetails();
-    print("EXPERIENCE DETAILS: $experienceDetails");
-    if (mounted) {
-      setState(() {
-        experienceDetails.forEach((key, value) {
-          Marker tempMarker = Marker(
-              markerId: MarkerId(key),
-              position:
-                  LatLng(value["position"]["lat"], value["position"]["lng"]));
-          markersSet.add(tempMarker);
-        });
-      });
-    }
+  }
+
+  Map<String, Map<String, dynamic>> getNearestExperiences(
+      double searchLat, double searchLng, int numOfExperiences) {
+    List<Map<String, dynamic>> idLatLngArr = [];
+    experienceDetails.forEach((key, value) {
+      double distanceFromSearch = distance(searchLat, searchLng,
+          value["position"]["lat"], value["position"]["lng"]);
+      Map<String, dynamic> idLatLngItem = {
+        "id": key,
+        "dist": distanceFromSearch,
+      };
+      idLatLngArr.add(idLatLngItem);
+    });
+
+    idLatLngArr.sort(((a, b) => a["dist"].compareTo(b["dist"])));
+    Iterable<Map<String, dynamic>> nearestExperiencesArr =
+        idLatLngArr.take(numOfExperiences);
+
+    Map<String, Map<String, dynamic>> nearestExperiencesMap = {};
+    nearestExperiencesArr.forEach((element) {
+      nearestExperiencesMap[element["id"]] = experienceDetails[element["id"]];
+    });
+
+    print("NEAREST EXPERIENCES: $nearestExperiencesMap");
+    return nearestExperiencesMap;
+  }
+
+  //TODO: Check accuracy
+  double distance(double lat1, double lng1, double lat2, double lng2) {
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 -
+        c((lat2 - lat1) * p) / 2 +
+        c(lat1 * p) * c(lat2 * p) * (1 - c((lng2 - lng1) * p)) / 2;
+    return 12742 * asin(sqrt(a));
   }
 
   //===================Google Maps=====================
@@ -98,10 +121,27 @@ class _CountryVisaPageState extends State<CountryVisaPage> {
     final lat = detail.result.geometry!.location.lat;
     final lng = detail.result.geometry!.location.lng;
 
+    Map<String, Map<String, dynamic>> fiveNearestExperiences =
+        getNearestExperiences(lat, lng, 5);
+
     markersSet.clear();
+    fiveNearestExperiences.forEach((key, value) {
+      String experienceTitle = value["title"];
+      double experienceLat = value["position"]["lat"];
+      double experienceLng = value["position"]["lng"];
+      markersSet.add(
+        Marker(
+          markerId: MarkerId(key),
+          position: LatLng(experienceLat, experienceLng),
+          infoWindow: InfoWindow(
+            title: experienceTitle,
+          ),
+        ),
+      );
+    });
     markersSet.add(
       Marker(
-        markerId: const MarkerId("0"),
+        markerId: const MarkerId("searchResult"),
         position: LatLng(lat, lng),
         infoWindow: InfoWindow(
           title: detail.result.name,
@@ -112,7 +152,7 @@ class _CountryVisaPageState extends State<CountryVisaPage> {
     setState(() {});
 
     mapController
-        .animateCamera(CameraUpdate.newLatLngZoom(LatLng(lat, lng), 14.0));
+        .animateCamera(CameraUpdate.newLatLngZoom(LatLng(lat, lng), 11.5));
   }
 
   Widget googleMapsCard() {
@@ -151,6 +191,7 @@ class _CountryVisaPageState extends State<CountryVisaPage> {
   void initState() {
     //TODO: Replace center with user location, IF they are in the same country
     // ELSE use default centre for the country
+    // Add Marker also
     _center = const LatLng(1.290270, 103.851959);
     gmapsAPIkey = dotenv.env['GOOGLE_MAPS_API_KEY']!;
     markersSet = {};

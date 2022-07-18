@@ -17,7 +17,6 @@ class ExperienceDetailsAPI {
       print("Erorr: FAILED TO RETRIEVE EXPERIENCE DETAILS");
       return {};
     }
-    print("Experience from server: ${jsonDecode(response.body)}");
     return jsonDecode(response.body);
   }
 }
