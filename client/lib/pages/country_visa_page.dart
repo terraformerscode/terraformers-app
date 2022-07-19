@@ -10,6 +10,7 @@ import 'package:client/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
@@ -61,7 +62,6 @@ class _CountryVisaPageState extends State<CountryVisaPage> {
     return nearestExperiencesMap;
   }
 
-  //TODO: Check accuracy
   double distance(double lat1, double lng1, double lat2, double lng2) {
     var p = 0.017453292519943295;
     var c = cos;
@@ -71,9 +71,43 @@ class _CountryVisaPageState extends State<CountryVisaPage> {
     return 12742 * asin(sqrt(a));
   }
 
+  //=======================Location=========================
+  Future<Position> getGeoLocationPosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      await Geolocator.openLocationSettings();
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+  }
+
   //===================Google Maps=====================
   late GoogleMapController mapController;
-  late LatLng _center;
   late Set<Marker> markersSet;
   late String gmapsAPIkey;
 
@@ -124,7 +158,7 @@ class _CountryVisaPageState extends State<CountryVisaPage> {
     Map<String, Map<String, dynamic>> fiveNearestExperiences =
         getNearestExperiences(lat, lng, 5);
 
-    markersSet.clear();
+    resetMarketSet();
     fiveNearestExperiences.forEach((key, value) {
       String experienceTitle = value["title"];
       double experienceLat = value["position"]["lat"];
@@ -141,12 +175,13 @@ class _CountryVisaPageState extends State<CountryVisaPage> {
     });
     markersSet.add(
       Marker(
-        markerId: const MarkerId("searchResult"),
-        position: LatLng(lat, lng),
-        infoWindow: InfoWindow(
-          title: detail.result.name,
-        ),
-      ),
+          markerId: const MarkerId("searchResult"),
+          position: LatLng(lat, lng),
+          infoWindow: InfoWindow(
+            title: detail.result.name,
+          ),
+          icon:
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen)),
     );
 
     setState(() {});
@@ -160,11 +195,34 @@ class _CountryVisaPageState extends State<CountryVisaPage> {
       onMapCreated: _onMapCreated,
       markers: markersSet,
       mapType: MapType.hybrid,
-      initialCameraPosition: CameraPosition(
-        target: _center,
+      initialCameraPosition: const CameraPosition(
+        target: LatLng(0, 0),
         zoom: 11.0,
       ),
     );
+  }
+
+  Future<LatLng> getCurrentLocation() async {
+    Position currentPosition = await getGeoLocationPosition();
+    LatLng currLatLng =
+        LatLng(currentPosition.latitude, currentPosition.longitude);
+    Marker marker = Marker(
+        markerId: const MarkerId("currentLocation"),
+        position: currLatLng,
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue));
+    markersSet.add(marker);
+    setState(() {});
+    return currLatLng;
+  }
+
+  void displayCurrentLocation() async {
+    LatLng currLatLng = await getCurrentLocation();
+    mapController.animateCamera(CameraUpdate.newLatLngZoom(currLatLng, 11.5));
+  }
+
+  void resetMarketSet() async {
+    markersSet.clear();
+    LatLng currLatLng = await getCurrentLocation();
   }
 
   //=========================Widget=======================================
@@ -192,7 +250,7 @@ class _CountryVisaPageState extends State<CountryVisaPage> {
     //TODO: Replace center with user location, IF they are in the same country
     // ELSE use default centre for the country
     // Add Marker also
-    _center = const LatLng(1.290270, 103.851959);
+    displayCurrentLocation();
     gmapsAPIkey = dotenv.env['GOOGLE_MAPS_API_KEY']!;
     markersSet = {};
     getExperienceDetails();
