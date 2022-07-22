@@ -16,40 +16,32 @@ class Routes {
     return routeName == routesMap[page] ? true : false;
   }
 
-  static void profileRoute(BuildContext context, bool pushReplacement) {
-    if (currentRoute(context, Pages.profilePage)) {
-      return;
-    }
-
+  static void buildNormalRoute(
+    BuildContext context, bool pushReplacement, Widget page) {
     pushReplacement
-        ? Navigator.of(context).pushReplacement(PageTransition(
-            type: PageTransitionType.rightToLeftWithFade,
-            child: const ProfilePage(),
-            duration: const Duration(milliseconds: 750),
-            reverseDuration: const Duration(milliseconds: 500)))
-        : Navigator.of(context).push(PageTransition(
-            type: PageTransitionType.rightToLeftWithFade,
-            child: const ProfilePage(),
-            duration: const Duration(milliseconds: 750),
-            reverseDuration: const Duration(milliseconds: 500)));
+      ? Navigator.of(context).pushReplacement(PageTransition(
+        type: PageTransitionType.rightToLeftWithFade,
+        child: page,
+        duration: const Duration(milliseconds: 750),
+        reverseDuration: const Duration(milliseconds: 500)))
+      : Navigator.of(context).push(PageTransition(
+        type: PageTransitionType.rightToLeftWithFade,
+        child: page,
+        duration: const Duration(milliseconds: 750),
+        reverseDuration: const Duration(milliseconds: 500)));
+  }
+
+
+  static void profileRoute(BuildContext context, bool pushReplacement) {
+    buildNormalRoute(context, pushReplacement, const ProfilePage());
   }
 
   static void loginRoute(BuildContext context, bool pushReplacement) {
-    if (currentRoute(context, Pages.loginPage)) {
-      return;
-    }
+    buildNormalRoute(context, pushReplacement, const LoginPage());
+  }
 
-    pushReplacement
-        ? Navigator.of(context).pushReplacement(PageTransition(
-            type: PageTransitionType.rightToLeftWithFade,
-            child: const LoginPage(),
-            duration: const Duration(milliseconds: 750),
-            reverseDuration: const Duration(milliseconds: 500)))
-        : Navigator.of(context).push(PageTransition(
-            type: PageTransitionType.rightToLeftWithFade,
-            child: const LoginPage(),
-            duration: const Duration(milliseconds: 750),
-            reverseDuration: const Duration(milliseconds: 500)));
+  static void countryVisaRoute(BuildContext context, bool pushReplacement) {
+    buildNormalRoute(context, pushReplacement, const CountryVisaPage());
   }
 
   static void loginRouteLeftToRight(BuildContext context) {
@@ -62,22 +54,4 @@ class Routes {
         (route) => false);
   }
 
-  static void countryVisaRoute(BuildContext context, bool pushReplacement) {
-    if (currentRoute(context, Pages.countryVisaPage)) {
-      return;
-    }
-
-    pushReplacement
-        ? Navigator.of(context).pushReplacement(PageTransition(
-            type: PageTransitionType.rightToLeftWithFade,
-            child: const CountryVisaPage(),
-            duration: const Duration(milliseconds: 750),
-            reverseDuration: const Duration(milliseconds: 500)))
-        : Navigator.of(context).push(PageTransition(
-            type: PageTransitionType.rightToLeftWithFade,
-            child: const CountryVisaPage(),
-            duration: const Duration(milliseconds: 750),
-            reverseDuration: const Duration(milliseconds: 500)));
-  }
-
-  }
+}

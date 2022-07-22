@@ -1,3 +1,4 @@
+import 'package:client/pages/all_country_visas_page.dart';
 import 'package:client/pages/country_visa_page.dart';
 import 'package:flutter/material.dart';
 import 'package:client/apptheme.dart';
@@ -18,6 +19,7 @@ enum Pages {
   loginPage,
   profilePage,
   countryVisaPage,
+  allCountryVisasPage
 }
 
 var routesMap = <Pages, String>{
@@ -25,6 +27,7 @@ var routesMap = <Pages, String>{
   Pages.loginPage: '/login',
   Pages.profilePage: '/profile',
   Pages.countryVisaPage: '/countryVisa',
+  Pages.allCountryVisasPage: "/allCountryVisas"
 };
 
 class MyApp extends StatelessWidget {
@@ -41,6 +44,7 @@ class MyApp extends StatelessWidget {
         routesMap[Pages.loginPage]!: (_) => const LoginPage(),
         routesMap[Pages.profilePage]!: (_) => const ProfilePage(),
         routesMap[Pages.countryVisaPage]!: (_) => const CountryVisaPage(),
+        routesMap[Pages.allCountryVisasPage]!: (_) => const AllCountryVisasPage(),
       },
     );
   }

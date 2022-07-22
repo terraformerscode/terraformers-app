@@ -16,14 +16,14 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:page_transition/page_transition.dart';
 
-class CountryVisaPage extends StatefulWidget {
-  const CountryVisaPage({Key? key}) : super(key: key);
+class AllCountryVisasPage extends StatefulWidget {
+  const AllCountryVisasPage({Key? key}) : super(key: key);
 
   @override
-  _CountryVisaPageState createState() => _CountryVisaPageState();
+  _AllCountryVisasPageState createState() => _AllCountryVisasPageState();
 }
 
-class _CountryVisaPageState extends State<CountryVisaPage> {
+class _AllCountryVisasPageState extends State<AllCountryVisasPage> {
   // Experience contains: location, title, tags, regenerative score (localised, authentic, intimate), description, photos
 
   // SEARCH FLOW ==> Search for place, Get LATLNG of place,
