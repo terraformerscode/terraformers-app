@@ -28,7 +28,6 @@ enum ToggleBetweenCards {
 
 class _LoginPageState extends State<LoginPage> {
   late Image _globeYellow;
-  TerraformersConst tfConsts = TerraformersConst();
 
   late TextEditingController _emailController;
   late TextEditingController _usernameController;
@@ -400,7 +399,7 @@ you will be directed to the registration page!''',
               child: Text(
                 'here.',
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      color: tfConsts.yellow,
+                      color: TerraformersConst.yellow,
                     ),
               ),
             ),
@@ -515,9 +514,9 @@ to reset your password!''',
               fieldHeight: 50,
               fieldWidth: 40,
               activeFillColor: Colors.white,
-              activeColor: tfConsts.lightBlue,
-              selectedColor: tfConsts.yellow,
-              inactiveColor: tfConsts.lightBlue),
+              activeColor: TerraformersConst.lightBlue,
+              selectedColor: TerraformersConst.yellow,
+              inactiveColor: TerraformersConst.lightBlue),
           animationDuration: const Duration(milliseconds: 300),
           controller: otpField,
           onCompleted: (otp) async {

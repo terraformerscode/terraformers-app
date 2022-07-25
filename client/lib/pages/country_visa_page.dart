@@ -128,7 +128,7 @@ class _CountryVisaPageState extends State<CountryVisaPage> {
         decoration:
             const InputDecoration(hintText: 'Search for nearby experiences'),
         onError: onSearchError,
-        components: [Component(Component.country, "sg")]);
+        components: [Component(Component.country, "fa")]);
 
     displayPrediction(p);
   }
@@ -268,7 +268,7 @@ class _CountryVisaPageState extends State<CountryVisaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TFAppBars().buildMediumBlue(context, "Singapore"),
+      appBar: TFAppBars().buildMediumBlue(context, title: "Singapore"),
       body: SizedBox(
         // Phone screen's height and width to wrap column
         height: MediaQuery.of(context).size.height,

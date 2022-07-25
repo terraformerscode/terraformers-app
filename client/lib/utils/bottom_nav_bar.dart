@@ -19,7 +19,7 @@ class TFBottomNavBar {
         Routes.profileRoute(context, false);
         break;
       case 1:
-        Routes.countryVisaRoute(context, false);
+        Routes.allCountryVisaRoute(context, false);
         break;
       case 2:
         Routes.profileRoute(context, false);

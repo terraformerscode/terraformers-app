@@ -185,13 +185,28 @@ function authenticateAuthToken(req, res, next) {
 }
 
 //====================COUNTRY VISA STUFF=======================
+const iso = require('iso-3166-1');
+
+var countryISOMap = iso.all();
+
 // get experienceDetails
 app.get("/experienceDetails", (req, res) => {
-    res.status(200).json(experienceDetails)
+    res.status(200).json(SGExperienceDetails)
+})
+
+app.get("/userCountryISO", (req, res) => {
+    //TODO: Pass in their user country visas and display only those countries
+    userCountryISOMap = {}
+    userCountries = ["Singapore", "Japan", "Vietnam", "Cambodia"]
+    userCountries.forEach((countryName) => {
+        countryISOMap = iso.whereCountry(countryName)
+        userCountryISOMap[countryName] = countryISOMap
+    })
+    res.status(200).json(userCountryISOMap)
 })
 
 // Map of experiences within each country
-var experienceDetails = {
+var SGExperienceDetails = {
     "0": {
       "title": "Bishan",
       "description": "Hi",

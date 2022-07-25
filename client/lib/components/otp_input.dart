@@ -23,7 +23,7 @@ class OtpInput extends StatelessWidget {
           border: const OutlineInputBorder(),
           counterText: '',
           hintStyle: TextStyle(
-            color: TerraformersConst().yellow,
+            color: TerraformersConst.yellow,
             fontSize: 20.0
           ),
         ),

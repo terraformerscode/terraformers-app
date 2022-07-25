@@ -1,4 +1,5 @@
 import 'package:client/main.dart';
+import 'package:client/pages/all_country_visas_page.dart';
 import 'package:client/pages/country_visa_page.dart';
 import 'package:client/pages/login_page.dart';
 import 'package:client/pages/profile_page.dart';
@@ -42,6 +43,10 @@ class Routes {
 
   static void countryVisaRoute(BuildContext context, bool pushReplacement) {
     buildNormalRoute(context, pushReplacement, const CountryVisaPage());
+  }
+
+  static void allCountryVisaRoute(BuildContext context, bool pushReplacement) {
+    buildNormalRoute(context, pushReplacement, const AllCountryVisasPage());
   }
 
   static void loginRouteLeftToRight(BuildContext context) {

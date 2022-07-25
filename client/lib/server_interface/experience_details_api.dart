@@ -19,4 +19,16 @@ class ExperienceDetailsAPI {
     }
     return jsonDecode(response.body);
   }
+
+  static Future<dynamic>
+      getUserCountryISO() async {
+    var url = "$serverUrl/userCountryISO";
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode != 200) {
+      print("Erorr: FAILED TO RETRIEVE UserCountryISO");
+      return {};
+    }
+    return jsonDecode(response.body);
+  }
 }

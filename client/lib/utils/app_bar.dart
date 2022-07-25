@@ -10,11 +10,11 @@ class TFAppBars {
     );
   }
 
-  PreferredSizeWidget buildMediumBlue(BuildContext context, String title) {
+  PreferredSizeWidget buildMediumBlue(BuildContext context, {String title = ""}) {
     return AppBar(
       title: Text(title),
       centerTitle: true,
-      backgroundColor: TerraformersConst().mediumBlue,
+      backgroundColor: TerraformersConst.mediumBlue,
       elevation: 0,
     );
   }
