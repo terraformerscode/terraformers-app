@@ -4,8 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserRegistrationAPI {
-  // static var serverUrl = "http://18.236.212.60:80";
-  static var serverUrl = "http://10.0.2.2:5000";
+  // static var authServerUrl = "http://18.236.212.60:80";
+  static var authServerUrl = "http://10.0.2.2:5000";
 
   static var auth0ClientID = dotenv.env['auth0ClientID'];
   static var auth0Url = dotenv.env['auth0Url'];
@@ -13,7 +13,7 @@ class UserRegistrationAPI {
   static var auth0ManagementAPI = dotenv.env['auth0ManagementAPI'];
 
   static signUp(email, username, password) async {
-    var url = "$serverUrl/signup";
+    var url = "$authServerUrl/signup";
 
     final response = await http.post(
       Uri.parse(url),
@@ -29,7 +29,7 @@ class UserRegistrationAPI {
   }
 
   static Future<bool> logIn(email, password) async {
-    var url = "$serverUrl/login";
+    var url = "$authServerUrl/login";
     var loggedIn = false;
 
     final response = await http.post(
@@ -115,7 +115,7 @@ class UserRegistrationAPI {
   }
 
   static Future<bool> resetPassword(email, password) async {
-    var url = "$serverUrl/resetPassword";
+    var url = "$authServerUrl/resetPassword";
 
     final response = await http.put(
       Uri.parse(url),
@@ -138,7 +138,7 @@ class UserRegistrationAPI {
   }
 
   static Future<bool> userExists(email) async {
-    var url = "$serverUrl/userExists";
+    var url = "$authServerUrl/userExists";
 
     final response = await http.put(
       Uri.parse(url),
@@ -163,7 +163,7 @@ class UserRegistrationAPI {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String authToken = prefs.getString("terraformersAuthToken") ?? "0";
 
-    var url = "$serverUrl/loggedInUser";
+    var url = "$authServerUrl/loggedInUser";
     final response = await http.get(Uri.parse(url), headers: <String, String>{
       'Authorization': 'Bearer $authToken',
     });
@@ -180,7 +180,7 @@ class UserRegistrationAPI {
     String terraformersRefreshToken =
         prefs.getString("terraformersRefreshToken") ?? "0";
 
-    var url = "$serverUrl/logout";
+    var url = "$authServerUrl/logout";
     final response = await http.delete(
       Uri.parse(url),
       headers: <String, String>{

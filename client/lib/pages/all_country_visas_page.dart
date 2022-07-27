@@ -1,4 +1,5 @@
 import 'package:client/appimagespath.dart';
+import 'package:client/server_interface/experience_details_api.dart';
 import 'package:client/utils/app_bar.dart';
 import 'package:client/utils/bottom_nav_bar.dart';
 import 'package:client/utils/constants.dart';
@@ -15,8 +16,10 @@ class AllCountryVisasPage extends StatefulWidget {
 class _AllCountryVisasPageState extends State<AllCountryVisasPage> {
   late Image _globeWhite;
   // TODO: Transfer to database and retrieve from there
-  //TODO: HERE NOW - Use streambuilder to build the all country visa page
-  List<String> userCountryVisas = ["Singapore", "Singapore", "Singapore"];
+  //TODO: HERE NOW - Use futurebuilder to build the all country visa page
+  Future<dynamic> userCountryVisasFuture =
+      ExperienceDetailsAPI.getUserCountryISO();
+  Map<String, String> initialData = {"Singapore": "SG"};
 
   double pageHorizontalPadding = 20;
   double pageVerticalPadding = 0;
@@ -52,11 +55,10 @@ class _AllCountryVisasPageState extends State<AllCountryVisasPage> {
                     children: [
                       terraformersYellowGlobe(),
                       DecoratedBox(
-                        decoration:
-                          BoxDecoration(
-                            color: TerraformersConst.mediumBlue,
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
+                        decoration: BoxDecoration(
+                          color: TerraformersConst.mediumBlue,
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
                         child: Text(
                           countryVisas[index],
                           style: Theme.of(context)
@@ -98,14 +100,36 @@ class _AllCountryVisasPageState extends State<AllCountryVisasPage> {
         child: Padding(
           padding: EdgeInsets.symmetric(
               vertical: pageVerticalPadding, horizontal: pageHorizontalPadding),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 20),
-              buildRow(userCountryVisas, 3, 5),
-              const SizedBox(height: 20),
-            ],
+          child: FutureBuilder(
+            future: userCountryVisasFuture,
+            initialData: initialData,
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (!snapshot.hasData) {
+                return const Text("Loading...");
+              }
+              if (snapshot.hasError) {
+                return const Text("ERROR LOADING!");
+              }
+
+              print(snapshot.data);
+              dynamic userCountryVisasMap = snapshot.data;
+              List<String> userCountryVisas = [];
+              userCountryVisasMap.forEach((countryName, countryMap) {
+                userCountryVisas.add(countryName);
+              });
+
+              //TODO: Take in the country code and use it to display appropriate
+              // countryVisaPage
+              return Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 20),
+                  buildRow(userCountryVisas, 3, 5),
+                  const SizedBox(height: 20),
+                ],
+              );
+            },
           ),
         ),
       ),

@@ -2,10 +2,11 @@
   "name": "server",
   "version": "1.0.0",
   "description": "Server-side app for Terraformers App",
-  "main": "server.js",
+  "main": "authServer.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
+    "startAuth": "node authServer.js",
+    "startExp": "node experienceServer.js",
     "devStart": "nodemon server.js"
   },
   "repository": {
