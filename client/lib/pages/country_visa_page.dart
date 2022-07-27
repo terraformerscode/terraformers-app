@@ -128,7 +128,7 @@ class _CountryVisaPageState extends State<CountryVisaPage> {
         decoration:
             const InputDecoration(hintText: 'Search for nearby experiences'),
         onError: onSearchError,
-        components: [Component(Component.country, "fa")]);
+        components: [Component(Component.country, "sg")]);
 
     displayPrediction(p);
   }
